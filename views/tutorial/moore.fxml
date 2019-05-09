@@ -1,8 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</AnchorPane>
-
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MooreController">
+   <children>
+      <SplitPane dividerPositions="0.3" prefHeight="800.0" prefWidth="1000.0">
+        <items>
+          <AnchorPane prefHeight="800.0">
+               <children>
+                  <VBox prefWidth="332.0" style="-fx-background-color: CBCBCB;">
+                     <children>
+                        <Label fx:id="numberlable" prefHeight="17.0" text="Aggiungi Segmento di durata  (vuoto per random)" />
+                        <HBox prefHeight="28.0">
+                           <children>
+                              <TextField fx:id="numberfield_d" prefHeight="25.0" prefWidth="52.0">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin></TextField>
+                              <Label text="e che finirà a tempo">
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="numberfield_f" prefHeight="25.0" prefWidth="52.0">
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Button fx:id="add" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#handleButtons" text="Add">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets bottom="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="qui apparirebbe il codice, linee evidenziate quando vengono eseguite" wrappingWidth="331.400390625" />
+                        <Separator prefHeight="8.0" prefWidth="332.0" />
+                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                  </VBox>
+                  <BorderPane centerShape="false" layoutY="759.0" prefHeight="39.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">
+                     <left>
+                        <Button fx:id="reset" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Reset" textFill="#fc0000" BorderPane.alignment="CENTER" />
+                     </left>
+                     <right>
+                        <Button fx:id="start" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Start" textFill="#14ae09" BorderPane.alignment="CENTER" />
+                     </right>
+                     <padding>
+                        <Insets left="30.0" right="30.0" />
+                     </padding>
+                  </BorderPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="762.0" style="-fx-background-color: DFDFDF;">
+               <children>
+                  <VBox fx:id="segmentcontainer" prefHeight="800.0" prefWidth="660.0" />
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</Pane>
