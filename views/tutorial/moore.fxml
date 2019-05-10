@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.control.*?>
@@ -10,9 +11,9 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MooreController">
    <children>
-      <SplitPane dividerPositions="0.3" prefHeight="800.0" prefWidth="1000.0">
+      <SplitPane dividerPositions="0.33567134268537074, 0.39779559118236474" prefHeight="800.0" prefWidth="1000.0">
         <items>
-          <AnchorPane prefHeight="800.0">
+          <AnchorPane prefHeight="798.0" prefWidth="435.0">
                <children>
                   <VBox prefWidth="332.0" style="-fx-background-color: CBCBCB;">
                      <children>
@@ -65,9 +66,10 @@
                   </BorderPane>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="762.0" style="-fx-background-color: DFDFDF;">
+            <VBox fx:id="info" prefHeight="798.0" prefWidth="17.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="675.0" style="-fx-background-color: DFDFDF;">
                <children>
-                  <VBox fx:id="segmentcontainer" prefHeight="800.0" prefWidth="660.0" />
+                  <VBox fx:id="segmentcontainer" layoutX="-4.0" prefHeight="800.0" prefWidth="664.0" />
                </children></AnchorPane>
         </items>
       </SplitPane>

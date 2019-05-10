@@ -12,11 +12,9 @@ public class Segment {
 	
 	public Segment(int ft, int dt) throws IOException {
 		this.line = FXMLLoader.load(getClass().getResource("/tutorial/mooreLine.fxml"));
-		
 		//scaling and moving the arrow according to its proportions
-		line.setTranslateX(50 * dt);
-		line.setMaxWidth(line.getWidth() * dt/20);
-
+		line.setTranslateX(50 * ft);	//TODO: decidere una scala
+		line.setScaleX(dt);
 		this.ft = ft;
 		this.dt = dt;
 	}

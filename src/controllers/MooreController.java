@@ -25,13 +25,13 @@ public class MooreController {
 	@FXML
 	Label numberlable;
 	@FXML
-	VBox segmentcontainer;
+	VBox segmentcontainer, info;
 	
 
 	@FXML
 	void handleButtons(ActionEvent event) throws IOException {
 		if(event.getSource() == add) {
-			if(segments.size() < 6) {
+			if(segments.size() < 30) {
 				manageAdd();
 			} else {
 				numberlable.setText("Limite elementi raggiunto");
@@ -43,6 +43,8 @@ public class MooreController {
 	void manageAdd() throws IOException {
 		String dt = numberfield_d.getText();
 		String ft = numberfield_f.getText();
+		numberfield_d.clear();
+		numberfield_f.clear();
 		int fti = 0;
 		int dti = 0;
 		if(!dt.isEmpty() && !dt.isEmpty()) {
@@ -52,14 +54,20 @@ public class MooreController {
 			}
 		}
 		if(fti <= 0 || fti > 20) 
-			fti = (new Random()).nextInt(100);
+			fti = (new Random()).nextInt(1);
 		if(dti <= 0 || dti > 20) 
-			dti = (new Random()).nextInt(100);
+			dti = (new Random()).nextInt(10);
+		
 		Segment tmpsegment = new Segment(fti, dti);
 		segments.add(tmpsegment);
 		Pane line = tmpsegment.getLine();
-		
 		segmentcontainer.getChildren().add(line);
-	}
+		Label info_l = new Label("ft:" + fti + "dt:" + dti);
+		info.getChildren().add(info_l);
+		//da eseguire dopo che i node sono stati aggiunti al root
+		double padding = (line.getBoundsInParent().getHeight() - info_l.getBoundsInParent().getHeight())/4;	//altezza mooreLine importato, allineare labels con frecce
+		info_l.setPadding(new Insets(padding, 0, padding, 0));
+		
+		}
 	
 }

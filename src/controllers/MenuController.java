@@ -44,7 +44,6 @@ public class MenuController {
 		stage = (Stage) toMoore.getScene().getWindow();
 		Scene scene = null;
 		if(event.getSource() == toMoore) {
-			System.out.println(getClass().getResource("/tutorial/moore.fxml"));
 			root = FXMLLoader.load(getClass().getResource("/tutorial/moore.fxml"));
 			scene = new Scene(root, MOORE_WIDTH_t, MOORE_HEIGHT_t);
 		} else if (event.getSource() == toPrim) {
