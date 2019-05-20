@@ -17,6 +17,7 @@
                <children>
                   <VBox prefWidth="332.0" style="-fx-background-color: CBCBCB;">
                      <children>
+                        <Button fx:id="back" mnemonicParsing="false" onAction="#handleButtons" text="&lt;Back" />
                         <Label fx:id="numberlable" prefHeight="17.0" text="Aggiungi Segmento di durata  (vuoto per random)" />
                         <HBox prefHeight="28.0">
                            <children>
@@ -48,9 +49,14 @@
                            </VBox.margin>
                         </HBox>
                         <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="qui apparirebbe il codice, linee evidenziate quando vengono eseguite" wrappingWidth="331.400390625" />
+                        <HBox prefHeight="0.0" prefWidth="332.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocità di animazione:" wrappingWidth="126.400390625" />
+                              <Slider fx:id="animationspeed" max="2000.0" min="10.0" prefHeight="14.0" prefWidth="255.0" value="500.0" />
+                           </children>
+                        </HBox>
                         <Separator prefHeight="8.0" prefWidth="332.0" />
-                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <VBox fx:id="codecontainer" prefHeight="628.0" prefWidth="332.0" />
                      </children>
                   </VBox>
                   <BorderPane centerShape="false" layoutY="759.0" prefHeight="39.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">

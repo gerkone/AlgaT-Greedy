@@ -57,7 +57,7 @@ public class Main extends Application {
 		
 		Timeline timeline = new Timeline(new KeyFrame(
 
-				Duration.millis(2500), ae -> {
+				Duration.millis(100), ae -> {
 					try {
 						root = (Pane) FXMLLoader.load(getClass().getResource("/menu.fxml"));
 					} catch (IOException e) {
