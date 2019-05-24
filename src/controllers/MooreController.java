@@ -95,15 +95,10 @@ public class MooreController {
 
 			}
 		} else if (event.getSource() == reset) {
-			executionThread.stop();
-			for (int i = 0; i < code.size(); i++) {
-				code.get(i).setStyle("-fx-background-color: CBCBCB;");
-			}
-			segments.clear();
-			segmentcontainer.getChildren().clear();
-			info.getChildren().clear();
-			numberlable.setText("Aggiungi segmento di durata (vuoto per random)");
+			reset();
 		} else if (event.getSource() == back) {
+			reset();
+			
 			try {
 				root = FXMLLoader.load(getClass().getResource("/menu.fxml"));
 			} catch (IOException e) {
@@ -121,15 +116,27 @@ public class MooreController {
 		}
 	}
 
-	private void clear() {
-		segments.forEach((s) -> {
-			try {
-				s.deselect(); // resetta tutte le frecce a nere, e deselezionate
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
+	private void reset() {
+		if(executionThread != null)
+			executionThread.stop();
+		for (int i = 0; i < code.size(); i++) {
+			code.get(i).setStyle("-fx-background-color: CBCBCB;");
+		}
+		segments.clear();
+		segmentcontainer.getChildren().clear();
+		info.getChildren().clear();
+		numberlable.setText("Aggiungi segmento di durata (vuoto per random)");
 	}
+
+//	private void deselect() {
+//		segments.forEach((s) -> {
+//			try {
+//				s.deselect(); // resetta tutte le frecce a nere, e deselezionate
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		});
+//	}
 
 	private void nextHighlight(int p, int s) throws InterruptedException {
 
@@ -145,8 +152,9 @@ public class MooreController {
 		    @Override public Void call() throws InterruptedException, IOException {
 		    	HashMap<Integer, Integer> queue = new HashMap<Integer, Integer>();
 				int time = 0;
-				code.get(0).setStyle("-fx-background-color: CBCBCB;");
-		    	for(int i = 1; i < segments.size(); i++) {
+				code.get(0).setStyle("-fx-background-color: CBCBCB;"); 
+		    	for(int i = 0; i < segments.size(); i++) {
+		    		segments.get(i).getLine().setStyle("-fx-background-color: yellow;");
 					nextHighlight(1, 2);
 					Thread.sleep((int) animationspeed.getValue());
 					queue.put(segments.get(i).getDt(), i);
@@ -170,15 +178,20 @@ public class MooreController {
 						Thread.sleep((int) animationspeed.getValue());
 						nextHighlight(8, 2);
 						Thread.sleep((int) animationspeed.getValue());
-						Platform.runLater(new Runnable() {
-				            @Override public void run() {
-				            	putSegments();
-				            }
-				        });
+						
 					}
 					else {
 						nextHighlight(4, 1);
 					}
+					
+					Platform.runLater(new Runnable() {
+			            @Override public void run() {
+			            	putSegments();
+			            }
+			        });
+					
+					segments.get(i).getLine().setStyle("-fx-background-color: DFDFDF;");
+					
 				}
 		    	code.forEach((l) -> {
 		    		l.setStyle("-fx-background-color: CBCBCB;");

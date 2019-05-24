@@ -21,10 +21,10 @@ public class MenuController {
 	private static final double MOORE_WIDTH_t = 1000;
 	
 
-	private static final double PRIM_HEIGHT_t = 800;
+	private static final double KRUSKAL_HEIGHT_t = 800;
 
 
-	private static final double PRIM_WIDTH_t = 1000;
+	private static final double KRUSKAL_WIDTH_t = 1000;
 	
 	
 	private static final double ZAINO_HEIGHT_t = 800;
@@ -47,8 +47,8 @@ public class MenuController {
 			root = FXMLLoader.load(getClass().getResource("/tutorial/moore.fxml"));
 			scene = new Scene(root, MOORE_WIDTH_t, MOORE_HEIGHT_t);
 		} else if (event.getSource() == toPrim) {
-			root = FXMLLoader.load(getClass().getResource("/tutorial/prim.fxml"));
-			scene = new Scene(root, PRIM_WIDTH_t, PRIM_HEIGHT_t);
+			root = FXMLLoader.load(getClass().getResource("/tutorial/kruskal.fxml"));
+			scene = new Scene(root, KRUSKAL_WIDTH_t, KRUSKAL_HEIGHT_t);
 		} else if(event.getSource() == toZaino) {
 			root = FXMLLoader.load(getClass().getResource("/tutorial/zaino.fxml"));
 			scene = new Scene(root, ZAINO_WIDTH_t, ZAINO_HEIGHT_t);

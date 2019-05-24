@@ -20,7 +20,7 @@
                   </AnchorPane>
             </content>
           </TitledPane>
-          <TitledPane animated="true" text="Prim">
+          <TitledPane animated="true" text="Kruskal">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
