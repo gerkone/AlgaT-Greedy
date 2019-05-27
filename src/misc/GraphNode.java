@@ -60,5 +60,13 @@ public class GraphNode {
 	public int getCol() {
 		return col;
 	}
+
+	public boolean hasEdges() {
+		return edges.size() != 0;
+	}
+
+	public boolean exists(Edge tmp) {
+		return edges.contains(tmp);
+	}
 	
 }
