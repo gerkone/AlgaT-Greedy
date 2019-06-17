@@ -2,10 +2,14 @@ package application;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Set;
 
+import misc.Edge;
+import misc.Mfset;
 import misc.Segment;
 
 
@@ -45,6 +49,32 @@ public class Algorithms {
 		queue.remove(max);
 		return ret;
 	}
+	
+	
+	public static void kruskal(ArrayList<Edge> A, int n, int m, Set<Edge> T) {
+        Mfset mf = new Mfset(n);
+
+        Collections.sort(A, new Comparator<Edge>() {
+            @Override
+            public int compare(Edge x, Edge y) {
+                // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+                return x.getWeight() > y.getWeight() ? -1 : (x.getWeight() < y.getWeight()) ? 1 : 0;
+            }
+        });
+        
+        
+        int c = 0;
+        int i = 0;
+
+        while (c < n-1 && i<=m) {
+            if (mf.find(A.get(i).getuID()) != mf.find(A.get(i).getvID())) {
+                mf.merge(A.get(i).getuID(), A.get(i).getvID());
+                T.add(A.get(i));
+                c++;
+            }
+            i++;
+        }
+    }
 }
 
 
