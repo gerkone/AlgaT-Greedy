@@ -42,15 +42,19 @@ public class MooreController {
 	private Parent root;
 
 	@FXML
-	Button add, reset, start, back;
+	private Button add, reset, start, back, next;
 	@FXML
-	TextField numberfield_d, numberfield_f;
+	private TextField numberfield_d, numberfield_f;
 	@FXML
-	Label numberlable;
+	private Label numberlable;
 	@FXML
-	VBox segmentcontainer, info, codecontainer;
+	private VBox segmentcontainer, info, codecontainer;
 	@FXML
-	Slider animationspeed;
+	private Slider animationspeed;
+	
+	
+	@FXML
+	private QuestionController questionDialogueController;	//controller of the embedded questionnaire, named as rule "<fx:id>Controller" to allow code injection
 
 	public MooreController() {
 		super();
@@ -76,6 +80,8 @@ public class MooreController {
 			code.add(new Label());
 			code.get(i).setText(lines.get(i));
 		}
+		
+//		questionDialogueController = new QuestionController(); grave errore, perde la referenza al controller assegnato via injextion
 	}
 
 	@SuppressWarnings("deprecation")
@@ -91,8 +97,6 @@ public class MooreController {
 		} else if (event.getSource() == start) {
 			if (segments.size() > 1) {
 				manageStart();
-			} else {
-
 			}
 		} else if (event.getSource() == reset) {
 			reset();
@@ -113,8 +117,11 @@ public class MooreController {
 				stage.setScene(change);
 				stage.show();
 			}
+		} else if(event.getSource() == next) {
+			getNextQuestion();
 		}
 	}
+
 
 	private void reset() {
 		if(executionThread != null)
@@ -126,6 +133,7 @@ public class MooreController {
 		segmentcontainer.getChildren().clear();
 		info.getChildren().clear();
 		numberlable.setText("Aggiungi segmento di durata (vuoto per random)");
+		questionDialogueController.clear();
 	}
 
 //	private void deselect() {
@@ -215,6 +223,15 @@ public class MooreController {
 		Algorithms.sortMoore(segments);
 		putSegments();
 		code.get(0).setStyle("-fx-background-color: yellow;");
+		
+		if(executionThread != null) {	//evita che si sovrappongano più esecuzioni
+			executionThread.stop();
+			for (int i = 0; i < code.size(); i++) {
+				code.get(i).setStyle("-fx-background-color: CBCBCB;");
+			}
+			
+		}
+		
 		doMoore();
 
 		putSegments();
@@ -279,5 +296,10 @@ public class MooreController {
 		});
 	}
 
+	private void getNextQuestion() {
+		questionDialogueController.clear();
+		questionDialogueController.enableButtons();
+		questionDialogueController.setAll(misc.QuestionManager.getMooreQuestion());
+	}
 
 }

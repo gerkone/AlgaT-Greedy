@@ -69,13 +69,29 @@
                      <padding>
                         <Insets left="30.0" right="30.0" />
                      </padding>
+                     <center>
+                        <Button fx:id="next" mnemonicParsing="false" text="Next Question" onAction="#handleButtons" BorderPane.alignment="CENTER" />
+                     </center>
                   </BorderPane>
                </children>
             </AnchorPane>
             <VBox fx:id="info" prefHeight="798.0" prefWidth="17.0" />
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="675.0" style="-fx-background-color: DFDFDF;">
                <children>
-                  <VBox fx:id="segmentcontainer" layoutX="-4.0" prefHeight="800.0" prefWidth="664.0" />
+                  <TabPane prefHeight="800.0" prefWidth="598.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab closable="false" text="Show">
+                           <content>
+                              <VBox fx:id="segmentcontainer" prefHeight="649.0" prefWidth="475.0" />
+                           </content>
+                      </Tab>
+                      <Tab closable="false" text="Questions">
+                      		<content>
+                      			<fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/>
+                      		</content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
                </children></AnchorPane>
         </items>
       </SplitPane>

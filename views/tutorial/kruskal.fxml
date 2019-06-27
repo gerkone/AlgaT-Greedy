@@ -31,10 +31,13 @@
                                  <padding>
                                     <Insets bottom="10.0" top="10.0" />
                                  </padding>
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin>
                               </Slider>
                               <Button fx:id="draw" mnemonicParsing="false" onAction="#handleButtons" prefHeight="0.0" prefWidth="56.0" text="Draw">
                                  <HBox.margin>
-                                    <Insets right="10.0" top="5.0" />
+                                    <Insets right="10.0" />
                                  </HBox.margin>
                               </Button>
                               <Label fx:id="nodeLabel" layoutX="110.0" layoutY="10.0">
@@ -45,20 +48,22 @@
                            </children>
                         </HBox>
                         <Separator prefHeight="15.0" prefWidth="326.0" />
-                        <BorderPane centerShape="false" prefHeight="39.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">
-                           <left>
-                              <Button fx:id="reset" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Reset" textFill="#fc0000" BorderPane.alignment="CENTER" />
-                           </left>
-                           <padding>
-                              <Insets left="30.0" right="30.0" />
-                           </padding>
-                           <right>
-                              <Button fx:id="start" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Start" textFill="#14ae09" BorderPane.alignment="CENTER" />
-                           </right>
-                           <center>
-                              <Button fx:id="randomize" mnemonicParsing="false"  onAction="#handleButtons" text="Randomize" BorderPane.alignment="CENTER" />
-                           </center>
-                        </BorderPane>
+                        <GridPane alignment="CENTER" prefHeight="94.0" prefWidth="326.0" style="-fx-background-color: ABABAB;">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Button fx:id="randomize" mnemonicParsing="false" onAction="#handleButtons" text="Randomize" GridPane.columnIndex="1" />
+                              <Button fx:id="next" mnemonicParsing="false"  onAction="#handleButtons" text="Next Question" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button fx:id="start" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Start" textFill="#14ae09" />
+                              <Button fx:id="reset" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Reset" textFill="#fc0000" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
                      </children>
                   </VBox>
                </children>
@@ -93,6 +98,11 @@
                      <content>
                         <Pane fx:id="matrixcontainer" prefHeight="200.0" prefWidth="200.0" />
                      </content>
+                  </Tab>
+                  <Tab closable="false" text="Questions">
+                      		<content>
+                      			<fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/>
+                      		</content>
                   </Tab>
                </tabs>
             </TabPane>

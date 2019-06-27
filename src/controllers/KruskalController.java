@@ -7,13 +7,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,7 +24,6 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import misc.Edge;
@@ -76,7 +73,7 @@ public class KruskalController {
 	@FXML
 	Pane graphspace, edgespace, matrixcontainer;
 	@FXML
-	Button randomize, reset, start, back, draw;
+	Button randomize, reset, start, back, draw, next;
 	@FXML
 	Label nodelabel;
 	@FXML
@@ -84,6 +81,9 @@ public class KruskalController {
 	@FXML
 	Slider nodesnumber;
 
+	@FXML
+	QuestionController questionDialogueController;
+	
 	public KruskalController() {
 		nodes = new ArrayList<GraphNode>();
 		edges = new ArrayList<Edge>();
@@ -123,6 +123,8 @@ public class KruskalController {
 			doKruskal();
 		} else if (event.getSource() == reset) {
 			reset();
+		} else if(event.getSource() == next) {
+			getNextQuestion();
 		} else if (event.getSource() == back) {
 			reset();
 
@@ -229,7 +231,7 @@ public class KruskalController {
 
 			nodes.add(newNode);
 		}
-		addEdges();
+		//addEdges();
 	}
 
 	private void addEdges() {
@@ -247,7 +249,6 @@ public class KruskalController {
 				uID = nodeU.getID();
 				vID = nodeV.getID();
 			} while ((vID == uID) || (edgeExist(uID, vID)));
-
 			
 			edges.add(new Edge(uID, vID, (new Random()).nextInt(MAX_WEIGHT)));
 
@@ -397,6 +398,12 @@ public class KruskalController {
 		} catch (Exception e) {
 			System.out.print("qualcosa e' andato storto");
 		}
+	}
+	
+	private void getNextQuestion() {
+		questionDialogueController.clear();
+		questionDialogueController.enableButtons();
+		questionDialogueController.setAll(misc.QuestionManager.getKruskalQuestion());
 	}
 
 }

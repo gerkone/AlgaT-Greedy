@@ -14,7 +14,7 @@ import javafx.util.Duration;
 
 public class Main extends Application {
 
-	private static final boolean SHOW_SPLASH = false;
+	private static final boolean SHOW_SPLASH = true;
 
 
 	private static final double MENU_HEIGHT_t = 400.0;
