@@ -7,11 +7,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import javafx.beans.binding.DoubleBinding;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import misc.Edge;
 import misc.GraphNode;
@@ -50,15 +53,13 @@ public class KruskalController {
 
 	private static final int GRID_ROWS = 5;
 
-	private static final int MIN_EDGES = 1;
-
 	private static final int MAX_WEIGHT = 100;
 
 	private static final int SPACE_WIDTH = 666;
 
 	private static final int SPACE_HEIGHT = 772;
 
-	protected static final int SPEED = 200;	//msec di step tra ogni ciclo del thread
+	protected static final int DEFAULT_SPEED = 500;	//msec di step tra ogni ciclo del thread
 
 	private Stage stage;
 	private Parent root;
@@ -79,7 +80,7 @@ public class KruskalController {
 	@FXML
 	GridPane nodegrid;
 	@FXML
-	Slider nodesnumber;
+	Slider nodesnumber, animationspeed;
 
 	@FXML
 	QuestionController questionDialogueController;
@@ -155,6 +156,8 @@ public class KruskalController {
 				
 				int m = edges.size();
 				
+				int cWeight = 0;	//somma peso complessivo mst
+				
 				ArrayList<Edge> T = new ArrayList<Edge>();
 				
 				Mfset mf = new Mfset(n);
@@ -177,8 +180,13 @@ public class KruskalController {
 //						T.add(A.get(i));	superfluo per la simulazione
 						
 						highlightFragment(i);
-						
-						Thread.sleep(SPEED);
+						cWeight += A.get(i).getWeight();
+						int speed = (int)animationspeed.getValue();
+						if((speed >= 100) && (speed <= 1000)) {
+							Thread.sleep(speed);
+						} else {
+							Thread.sleep(DEFAULT_SPEED);
+						}
 						
 						c++;
 					}
@@ -193,11 +201,15 @@ public class KruskalController {
 			private void highlightFragment(int i) {
 				edges.get(i).getEdge().setStroke(Color.RED);
 				edges.get(i).getEdge().setStrokeWidth(2);
+				int uID = edges.get(i).getuID();
+				int vID = edges.get(i).getvID();
 				
-				((Circle) getNodebyID(edges.get(i).getuID()).getNode().getChildren().get(0)).setStroke(Color.RED);
-				((Circle) getNodebyID(edges.get(i).getvID()).getNode().getChildren().get(0)).setStroke(Color.RED);
+				((Circle) getNodebyID(uID).getNode().getChildren().get(0)).setStroke(Color.RED);
+				((Circle) getNodebyID(vID).getNode().getChildren().get(0)).setStroke(Color.RED);
 				
 				edges.get(i).select();
+				
+				fragmentMatrix(uID, vID);
 			}
 		};
 
@@ -231,7 +243,7 @@ public class KruskalController {
 
 			nodes.add(newNode);
 		}
-		//addEdges();
+		addEdges();
 	}
 
 	private void addEdges() {
@@ -288,15 +300,15 @@ public class KruskalController {
 			text0.setText(String.valueOf(e.getWeight()));
 			text1.setText(String.valueOf(e.getWeight()));
 			
-			if(e.isSelected()) {
-				text0.setStyle("-fx-background-color: yellow");
-				text1.setStyle("-fx-background-color: yellow");
-			}
+//			if(e.isSelected()) {
+//				text0.setStyle("-fx-background-color: yellow");
+//				text1.setStyle("-fx-background-color: yellow");
+//			}
 
 			text0.setFont(new Font("Arial", 20));
 			text1.setFont(new Font("Arial", 20));
 
-			adjMatrix.add(text0, e.getuID(), e.getvID());
+			adjMatrix.add(text0, e.getuID(), e.getvID());	//node, uID = col, vID = row
 			adjMatrix.setHalignment(text0, HPos.CENTER);
 			adjMatrix.add(text1, e.getvID(), e.getuID());
 			adjMatrix.setHalignment(text1, HPos.CENTER);
@@ -304,6 +316,18 @@ public class KruskalController {
 
 		adjMatrix.setGridLinesVisible(true);
 		matrixcontainer.getChildren().add(adjMatrix);
+	}
+	
+	private void fragmentMatrix(int uID, int vID) {
+		GridPane adjMatrix = (GridPane) matrixcontainer.getChildren().get(0);
+		for (Node node : adjMatrix.getChildren()) {
+			boolean found = ((adjMatrix.getRowIndex(node) == vID) && (adjMatrix.getColumnIndex(node) == uID)) || 
+					((adjMatrix.getRowIndex(node) == uID) && (adjMatrix.getColumnIndex(node) == vID));
+	        if(found) {
+	            node.setStyle("-fx-background-color: red");
+	            break;
+	        }
+	    }
 	}
 
 	private void draw() {
@@ -346,29 +370,22 @@ public class KruskalController {
 		
 		StackPane n1 = getNodebyID(e.getuID()).getNode();
 		StackPane n2 = getNodebyID(e.getvID()).getNode();
-
-		e.getEdge().startXProperty().bind(n1.layoutXProperty().add(SPACE_WIDTH / GRID_COLUMNS / 2));
-		e.getEdge().startYProperty().bind(n1.layoutYProperty().add(SPACE_HEIGHT / GRID_ROWS / 2));
-		e.getEdge().endXProperty().bind(n2.layoutXProperty().add(SPACE_WIDTH / GRID_COLUMNS / 2));
-		e.getEdge().endYProperty().bind(n2.layoutYProperty().add(SPACE_HEIGHT / GRID_ROWS / 2));
+		DoubleBinding startx = n1.layoutXProperty().add(SPACE_WIDTH / GRID_COLUMNS / 2);
+		DoubleBinding endx = n1.layoutYProperty().add(SPACE_HEIGHT / GRID_ROWS / 2);
+		DoubleBinding starty = n2.layoutXProperty().add(SPACE_WIDTH / GRID_COLUMNS / 2);
+		DoubleBinding endy = n2.layoutYProperty().add(SPACE_HEIGHT / GRID_ROWS / 2);
+		e.getEdge().startXProperty().bind(startx);
+		e.getEdge().startYProperty().bind(endx);
+		e.getEdge().endXProperty().bind(starty);
+		e.getEdge().endYProperty().bind(endy);
+		
 		edgespace.getChildren().add(e.getEdge());
-
-//        line.startXProperty().bind(Bindings.createDoubleBinding(() -> {
-//          Bounds b = n1.getParent().getBoundsInParent();
-//          return b.getMinX() + b.getWidth() / 2 ;
-//      }, n1.getParent().boundsInParentProperty()));
-//      line.startYProperty().bind(Bindings.createDoubleBinding(() -> {
-//          Bounds b = n1.getParent().getBoundsInParent();
-//          return b.getMinY() + b.getHeight() / 2 ;
-//      }, n1.getParent().boundsInParentProperty()));
-//      line.endXProperty().bind(Bindings.createDoubleBinding(() -> {
-//          Bounds b = n2.getParent().getBoundsInParent();
-//          return b.getMinX() + b.getWidth() / 2 ;
-//      }, n2.getParent().boundsInParentProperty()));
-//      line.endYProperty().bind(Bindings.createDoubleBinding(() -> {
-//          Bounds b = n2.getParent().getBoundsInParent();
-//          return b.getMinY() + b.getHeight() / 2 ;
-//      }, n2.getParent().boundsInParentProperty()));
+		
+		Text tWeight = new Text(Integer.toString(e.getWeight()));
+		tWeight.setFont(new Font("Verdana", 14));
+		tWeight.setX((e.getEdge().getStartX() + e.getEdge().getEndX()) / 2);
+		tWeight.setY((e.getEdge().getStartY() + e.getEdge().getEndY()) / 2);
+		edgespace.getChildren().add(tWeight);
 	}
 
 	private GraphNode getNodebyID(int ID) {

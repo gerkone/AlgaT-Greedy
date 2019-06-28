@@ -1,8 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</AnchorPane>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ZainoController">
+   <children>
+      <SplitPane dividerPositions="0.33567134268537074" prefHeight="800.0" prefWidth="1000.0">
+        <items>
+          <AnchorPane prefHeight="798.0" prefWidth="435.0" style="-fx-background-color: DCDCDC;">
+               <children>
+                  <VBox prefWidth="332.0" style="-fx-background-color: CBCBCB;">
+                     <children>
+                        <Button fx:id="back" mnemonicParsing="false" onAction="#handleButtons" text="&lt;Back" />
+                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
+                        <HBox prefHeight="0.0" prefWidth="332.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocità di animazione:" wrappingWidth="126.400390625" />
+                              <Slider fx:id="animationspeed" max="2000.0" min="10.0" prefHeight="14.0" prefWidth="255.0" value="500.0" />
+                           </children>
+                        </HBox>
+                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
+                        <HBox prefHeight="37.0" prefWidth="308.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Capacità zaino:" wrappingWidth="126.400390625">
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin></Text>
+                              <Label prefHeight="37.0" prefWidth="35.0" text="${bagsize.value}">
+                              <padding>
+                                    <Insets bottom="10.0" />
+                                 </padding>
+                              </Label>
+                              <Slider fx:id="bagsize" blockIncrement="1.0" majorTickUnit="1.0" max="100.0" min="2.0" minorTickCount="0" prefHeight="14.0" prefWidth="170.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox prefHeight="0.0" prefWidth="332.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dimensione Insieme:" wrappingWidth="126.400390625">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <Label prefHeight="37.0" prefWidth="35.0" text="${objectpoolsize.value}">
+                              <padding>
+                                    <Insets bottom="10.0" />
+                                 </padding>
+                              </Label>
+                              <Slider fx:id="objectpoolsize" blockIncrement="1.0" majorTickUnit="1.0" max="200.0" min="2.0" minorTickCount="0" prefHeight="14.0" prefWidth="170.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
+                           </children>
+                        </HBox>
+                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modalità di preferenza:">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <HBox prefHeight="0.0" prefWidth="332.0">
+                           <children>
+                              <RadioButton fx:id="sortp" mnemonicParsing="false" text="Profitto max">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="sortoptions" />
+                                 </toggleGroup>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </RadioButton>
+                              <RadioButton fx:id="sortv" mnemonicParsing="false" text="Volume max" toggleGroup="$sortoptions">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </RadioButton>
+                              <RadioButton fx:id="sortpv" mnemonicParsing="false" text="Profitto/Volume max" toggleGroup="$sortoptions" />
+                           </children>
+                        </HBox>
+                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo di zaino:">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin></Text>
+                        <HBox prefHeight="0.0" prefWidth="332.0">
+                           <children>
+                              <ToggleButton fx:id="stepbag" mnemonicParsing="false" text="Zaino 0/1 (NON GREEDY!!)">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="bagoptions" />
+                                 </toggleGroup>
+                              </ToggleButton>
+                              <ToggleButton fx:id="realbag" mnemonicParsing="false" text="ZainoReale" toggleGroup="$bagoptions">
 
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </HBox.margin>
+                              </ToggleButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <BorderPane centerShape="false" layoutY="759.0" prefHeight="39.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">
+                     <left>
+                        <Button fx:id="reset" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Reset" textFill="#fc0000" BorderPane.alignment="CENTER" />
+                     </left>
+                     <right>
+                        <Button fx:id="start" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Start" textFill="#14ae09" BorderPane.alignment="CENTER" />
+                     </right>
+                     <padding>
+                        <Insets left="30.0" right="30.0" />
+                     </padding>
+                     <center>
+                        <Button fx:id="next" mnemonicParsing="false" onAction="#handleButtons" text="Next Question" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
+                  <HBox prefHeight="100.0" prefWidth="200.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="675.0" style="-fx-background-color: DFDFDF;">
+               <children>
+                  <TabPane prefHeight="800.0" prefWidth="660.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab closable="false" text="Show">
+                           <content>
+                           </content>
+                           <content>
+                              <SplitPane dividerPositions="0.5006485084306096" orientation="VERTICAL" prefHeight="771.0" prefWidth="483.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                       <children>
+                                          <HBox prefHeight="385.0" prefWidth="660.0" />
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                                </items>
+                              </SplitPane>
+                           </content>
+                      </Tab>
+                      <Tab closable="false" text="Questions">
+                      		<content>
+                      			<!-- <fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/> -->
+                      		</content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</Pane>

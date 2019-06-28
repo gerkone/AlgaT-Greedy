@@ -2,6 +2,7 @@ package misc;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("serial")
 public class QuestionManager {
 	
 	private static final ArrayList<Question> mooreQuestions 
@@ -21,8 +22,16 @@ public class QuestionManager {
 																}
 			
 	};
+	private static final ArrayList<Question> zainoQuestions 
+										= new ArrayList<Question>() {
+																{
+																	add(new Question("mada2", "b", "c", "d", "e", 2));
+																	add(new Question("man3", "b", "c", "d", "e", 3));
+																}
+
+};
 	
-	private static int nextMoore = 0, nextKruskal = 0;
+	private static int nextMoore = 0, nextKruskal = 0, nextZaino = 0;
 
 	public static Question getMooreQuestion() {
 		if(mooreQuestions.size() > 0) {
@@ -38,6 +47,16 @@ public class QuestionManager {
 		if(kruskalQuestions.size() > 0) {
 			Question ret = kruskalQuestions.get(nextKruskal);
 			nextKruskal = (nextKruskal + 1) % kruskalQuestions.size();
+			return ret;
+		} else {
+			return null;
+		}
+	}
+	
+	public static Question getZainoQuestion() {
+		if(zainoQuestions.size() > 0) {
+			Question ret = zainoQuestions.get(nextZaino);
+			nextZaino = (nextZaino + 1 ) % zainoQuestions.size();
 			return ret;
 		} else {
 			return null;

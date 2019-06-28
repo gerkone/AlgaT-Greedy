@@ -25,10 +25,6 @@ import misc.Segment;
 
 public class MooreController {
 
-	private static final double MENU_HEIGHT_t = 400.0;
-
-	private static final double MENU_WIDTH_t = 600.0;
-
 	private static final int MAX_RAND = 100;
 
 	private ArrayList<Segment> segments;
@@ -81,7 +77,7 @@ public class MooreController {
 			code.get(i).setText(lines.get(i));
 		}
 		
-//		questionDialogueController = new QuestionController(); grave errore, perde la referenza al controller assegnato via injextion
+//		questionDialogueController = new QuestionController(); grave errore, perde la referenza al controller assegnato via injection
 	}
 
 	@SuppressWarnings("deprecation")
@@ -111,7 +107,7 @@ public class MooreController {
 
 			stage = (Stage) back.getScene().getWindow();
 
-			Scene change = new Scene(root, MENU_WIDTH_t, MENU_HEIGHT_t);
+			Scene change = new Scene(root, application.Main.MENU_WIDTH_t, application.Main.MENU_HEIGHT_t);
 
 			if (change != null) {
 				stage.setScene(change);

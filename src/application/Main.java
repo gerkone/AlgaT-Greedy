@@ -17,10 +17,10 @@ public class Main extends Application {
 	private static final boolean SHOW_SPLASH = true;
 
 
-	private static final double MENU_HEIGHT_t = 400.0;
+	public static final double MENU_HEIGHT_t = 400.0;
 	
 	
-	private static final double MENU_WIDTH_t = 600.0;
+	public static final double MENU_WIDTH_t = 600.0;
 	
 
 	// main section

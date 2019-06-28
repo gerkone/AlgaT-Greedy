@@ -3,6 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
@@ -59,11 +60,18 @@
                           </rowConstraints>
                            <children>
                               <Button fx:id="randomize" mnemonicParsing="false" onAction="#handleButtons" text="Randomize" GridPane.columnIndex="1" />
-                              <Button fx:id="next" mnemonicParsing="false"  onAction="#handleButtons" text="Next Question" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button fx:id="next" mnemonicParsing="false" onAction="#handleButtons" text="Next Question" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Button fx:id="start" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Start" textFill="#14ae09" />
                               <Button fx:id="reset" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Reset" textFill="#fc0000" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
+                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
+                        <HBox prefHeight="0.0" prefWidth="332.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocità di animazione:" wrappingWidth="126.400390625" />
+                              <Slider fx:id="animationspeed" max="1000.0" min="100.0" prefHeight="14.0" prefWidth="255.0" value="500.0" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
@@ -96,12 +104,17 @@
                   </Tab>
                   <Tab closable="false" text="Matrix">
                      <content>
-                        <Pane fx:id="matrixcontainer" prefHeight="200.0" prefWidth="200.0" />
+                        <Pane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Label layoutX="3.0" layoutY="4.0" text="vID →" />
+                              <Label layoutX="6.0" layoutY="26.0" text="uID ↓" />
+                              <Pane fx:id="matrixcontainer" layoutX="-4.0" layoutY="-2.0" prefHeight="774.0" prefWidth="666.0" />
+                           </children></Pane>
                      </content>
                   </Tab>
                   <Tab closable="false" text="Questions">
                       		<content>
-                      			<fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/>
+                      			<!-- <fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/> -->
                       		</content>
                   </Tab>
                </tabs>
