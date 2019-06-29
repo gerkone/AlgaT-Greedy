@@ -13,7 +13,7 @@
    <children>
       <SplitPane dividerPositions="0.33567134268537074" prefHeight="800.0" prefWidth="1000.0">
         <items>
-          <AnchorPane prefHeight="798.0" prefWidth="435.0" style="-fx-background-color: DCDCDC;">
+          <AnchorPane prefHeight="777.0" prefWidth="332.0" style="-fx-background-color: DCDCDC;">
                <children>
                   <VBox prefWidth="332.0" style="-fx-background-color: CBCBCB;">
                      <children>
@@ -24,8 +24,11 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocità di animazione:" wrappingWidth="126.400390625" />
                               <Slider fx:id="animationspeed" max="2000.0" min="10.0" prefHeight="14.0" prefWidth="255.0" value="500.0" />
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
                         </HBox>
-                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
+                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: ;" />
                         <HBox prefHeight="37.0" prefWidth="308.0">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Capacità zaino:" wrappingWidth="126.400390625">
@@ -55,10 +58,26 @@
                                     <Insets bottom="10.0" />
                                  </padding>
                               </Label>
-                              <Slider fx:id="objectpoolsize" blockIncrement="1.0" majorTickUnit="1.0" max="200.0" min="2.0" minorTickCount="0" prefHeight="14.0" prefWidth="170.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
+                              <Slider fx:id="objectpoolsize" blockIncrement="1.0" majorTickUnit="1.0" max="37.0" min="2.0" minorTickCount="0" prefHeight="14.0" prefWidth="170.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
                            </children>
                         </HBox>
-                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
+                        <HBox prefHeight="0.0" prefWidth="332.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Aggiungi manualmente:" wrappingWidth="136.400390625">
+                                 <HBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <TextField fx:id="gainadd" prefHeight="25.0" prefWidth="77.0" promptText="guadagno">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin></TextField>
+                              <TextField fx:id="weightadd" prefHeight="25.0" prefWidth="45.0" promptText="peso" />
+                              <Separator orientation="VERTICAL" prefHeight="27.0" prefWidth="22.0" />
+                              <Button fx:id="add" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="43.0" text="add" />
+                           </children>
+                        </HBox>
+                        <Separator prefHeight="10.0" prefWidth="331.0" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modalità di preferenza:">
                            <VBox.margin>
                               <Insets bottom="10.0" />
@@ -66,7 +85,7 @@
                         </Text>
                         <HBox prefHeight="0.0" prefWidth="332.0">
                            <children>
-                              <RadioButton fx:id="sortp" mnemonicParsing="false" text="Profitto max">
+                              <RadioButton fx:id="sortg" mnemonicParsing="false" selected="true" text="Profitto max">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="sortoptions" />
                                  </toggleGroup>
@@ -74,37 +93,63 @@
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <RadioButton fx:id="sortv" mnemonicParsing="false" text="Volume max" toggleGroup="$sortoptions">
+                              <RadioButton fx:id="sortw" mnemonicParsing="false" text="Volume max" toggleGroup="$sortoptions">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </RadioButton>
-                              <RadioButton fx:id="sortpv" mnemonicParsing="false" text="Profitto/Volume max" toggleGroup="$sortoptions" />
+                              <RadioButton fx:id="sortgw" mnemonicParsing="false" text="Profitto/Volume max" toggleGroup="$sortoptions" />
                            </children>
                         </HBox>
-                        <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo di zaino:">
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin></Text>
-                        <HBox prefHeight="0.0" prefWidth="332.0">
+                        <Separator prefHeight="22.0" prefWidth="332.0" />
+                        <VBox prefHeight="51.0" prefWidth="340.0">
                            <children>
-                              <ToggleButton fx:id="stepbag" mnemonicParsing="false" text="Zaino 0/1 (NON GREEDY!!)">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="bagoptions" />
-                                 </toggleGroup>
-                              </ToggleButton>
-                              <ToggleButton fx:id="realbag" mnemonicParsing="false" text="ZainoReale" toggleGroup="$bagoptions">
-
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" />
-                                 </HBox.margin>
-                              </ToggleButton>
+                              <HBox prefHeight="51.0" prefWidth="332.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Capacità rimasta:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                    <Label fx:id="remainingcapacity" text="0">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="20.0" top="5.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <Separator prefHeight="17.0" prefWidth="332.0" />
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Guadagno totale:" wrappingWidth="116.7490234375">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                    <Label fx:id="totalgain" text="0">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="20.0" top="5.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
+                        </VBox>
                      </children>
                   </VBox>
-                  <BorderPane centerShape="false" layoutY="759.0" prefHeight="39.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">
+                  <BorderPane centerShape="false" layoutY="729.0" prefHeight="65.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">
                      <left>
                         <Button fx:id="reset" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Reset" textFill="#fc0000" BorderPane.alignment="CENTER" />
                      </left>
@@ -114,11 +159,17 @@
                      <padding>
                         <Insets left="30.0" right="30.0" />
                      </padding>
-                     <center>
+                     <bottom>
                         <Button fx:id="next" mnemonicParsing="false" onAction="#handleButtons" text="Next Question" BorderPane.alignment="CENTER" />
+                     </bottom>
+                     <center>
+                        <Button fx:id="fill" mnemonicParsing="false" onAction="#handleButtons" text="Fill" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                        </Button>
                      </center>
                   </BorderPane>
-                  <HBox prefHeight="100.0" prefWidth="200.0" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="675.0" style="-fx-background-color: DFDFDF;">
@@ -129,14 +180,30 @@
                            <content>
                            </content>
                            <content>
-                              <SplitPane dividerPositions="0.5006485084306096" orientation="VERTICAL" prefHeight="771.0" prefWidth="483.0">
+                              <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0">
                                 <items>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="771.0" prefWidth="327.0">
                                        <children>
-                                          <HBox prefHeight="385.0" prefWidth="660.0" />
+                                          <Text layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Oggetti:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <VBox fx:id="objectarea" layoutY="35.0" prefHeight="740.0" prefWidth="332.0" />
+                                          <Separator layoutY="30.0" prefHeight="10.0" prefWidth="326.0" />
                                        </children>
                                     </AnchorPane>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <Text layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zaino:">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <VBox fx:id="bagarea" layoutX="-2.0" layoutY="35.0" prefHeight="740.0" prefWidth="332.0" />
+                                          <Separator layoutX="1.0" layoutY="30.0" prefHeight="10.0" prefWidth="326.0" />
+                                       </children>
+                                    </AnchorPane>
                                 </items>
                               </SplitPane>
                            </content>

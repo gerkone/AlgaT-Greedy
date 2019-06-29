@@ -10,6 +10,7 @@ import java.util.Set;
 
 import misc.Edge;
 import misc.Mfset;
+import misc.Oggetto;
 import misc.Segment;
 
 
@@ -75,6 +76,10 @@ public class Algorithms {
             i++;
         }
     }
+
+	public static void bagpd(ArrayList<Oggetto> stuff, int i, int value) {	//bag in programmazione dinamica
+		
+	}
 }
 
 
