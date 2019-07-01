@@ -54,15 +54,9 @@ public class Algorithms {
 	
 	public static void kruskal(ArrayList<Edge> A, int n, int m, Set<Edge> T) {
         Mfset mf = new Mfset(n);
-
-        Collections.sort(A, new Comparator<Edge>() {
-            @Override
-            public int compare(Edge x, Edge y) {
-                // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-                return x.getWeight() > y.getWeight() ? -1 : (x.getWeight() < y.getWeight()) ? 1 : 0;
-            }
-        });
         
+        Collections.sort(A);
+        System.out.println("number of edge : " + A.size());
         
         int c = 0;
         int i = 0;
@@ -71,6 +65,7 @@ public class Algorithms {
             if (mf.find(A.get(i).getuID()) != mf.find(A.get(i).getvID())) {
                 mf.merge(A.get(i).getuID(), A.get(i).getvID());
                 T.add(A.get(i));
+                System.out.println("added edge : " + A.get(i));
                 c++;
             }
             i++;

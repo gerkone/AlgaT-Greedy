@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
+import application.Algorithms;
 import javafx.beans.binding.DoubleBinding;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -152,52 +155,73 @@ public class KruskalController {
 			@Override
 			public Void call() throws InterruptedException, IOException {
 				
-				int n = nodes.size();
+//				int n = nodes.size();
+//				
+//				int m = edges.size();
+//				
+//				int cWeight = 0;	//somma peso complessivo mst
+//				
+//				ArrayList<Edge> T = new ArrayList<Edge>();
+//				
+//				Mfset mf = new Mfset(n);
+//				
+//				ArrayList<Edge> A = new ArrayList<Edge>(edges);
+//				
+//				Collections.sort(A, new Comparator<Edge>() {
+//					@Override
+//					public int compare(Edge x, Edge y) {
+//						return x.getWeight() > y.getWeight() ? -1 : (x.getWeight() < y.getWeight()) ? 1 : 0;
+//					}
+//				});
+//				
+				Algorithms test = new Algorithms();
+				Set<Edge> a = new HashSet<Edge>();
+				test.kruskal((ArrayList<Edge>) edges, nodes.size(), edges.size(), a);
+				List<Edge> sorted = new ArrayList<Edge>(a);
+				Collections.sort(sorted);
+				System.out.println("sorted : " + sorted);
+				highlight(sorted);
 				
-				int m = edges.size();
-				
-				int cWeight = 0;	//somma peso complessivo mst
-				
-				ArrayList<Edge> T = new ArrayList<Edge>();
-				
-				Mfset mf = new Mfset(n);
-				
-				ArrayList<Edge> A = new ArrayList<Edge>(edges);
-				
-				Collections.sort(A, new Comparator<Edge>() {
-					@Override
-					public int compare(Edge x, Edge y) {
-						return x.getWeight() > y.getWeight() ? -1 : (x.getWeight() < y.getWeight()) ? 1 : 0;
-					}
-				});
-
-				int c = 0;
-				int i = 0;
-
-				while (c < n - 1 && i <= m) {
-					if (mf.find(A.get(i).getuID()) != mf.find(A.get(i).getvID())) {
-						mf.merge(A.get(i).getuID(), A.get(i).getvID());
-//						T.add(A.get(i));	superfluo per la simulazione
-						
-						highlightFragment(i);
-						cWeight += A.get(i).getWeight();
-						int speed = (int)animationspeed.getValue();
-						if((speed >= 100) && (speed <= 1000)) {
-							Thread.sleep(speed);
-						} else {
-							Thread.sleep(DEFAULT_SPEED);
-						}
-						
-						c++;
-					}
-					i++;
-				}
+//				int c = 0;
+//				int i = 0;
+//
+//				while (c < n - 1 && i <= m) {
+//					if (mf.find(A.get(i).getuID()) != mf.find(A.get(i).getvID())) {
+//						mf.merge(A.get(i).getuID(), A.get(i).getvID());
+////						T.add(A.get(i));	superfluo per la simulazione
+//						
+//						highlightFragment(i);
+//						cWeight += A.get(i).getWeight();
+//						int speed = (int)animationspeed.getValue();
+//						if((speed >= 100) && (speed <= 1000)) {
+//							Thread.sleep(speed);
+//						} else {
+//							Thread.sleep(DEFAULT_SPEED);
+//						}
+//						
+//						c++;
+//					}
+//					i++;
+//				}
 				
 				drawMatrix();	//eseguita solo quando il thread ha finito
-				
 				return null;
 			}
 
+			private void highlight(List<Edge> list) throws InterruptedException {
+				for(Edge el : list) {
+					el.getEdge().setStroke(Color.RED);
+					el.getEdge().setStrokeWidth(2);
+					int uID = el.getuID();
+					int vID = el.getvID();
+					((Circle) getNodebyID(uID).getNode().getChildren().get(0)).setStroke(Color.RED);
+					((Circle) getNodebyID(vID).getNode().getChildren().get(0)).setStroke(Color.RED);
+					el.select();
+					fragmentMatrix(uID, vID);
+					Thread.sleep((long) animationspeed.getValue());
+				}
+			}
+			
 			private void highlightFragment(int i) {
 				edges.get(i).getEdge().setStroke(Color.RED);
 				edges.get(i).getEdge().setStrokeWidth(2);
@@ -211,6 +235,8 @@ public class KruskalController {
 				
 				fragmentMatrix(uID, vID);
 			}
+			
+			
 		};
 
 		if(executionThread != null) {

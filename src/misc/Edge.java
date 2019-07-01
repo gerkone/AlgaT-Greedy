@@ -3,9 +3,9 @@ package misc;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-public class Edge {
-	private int uID;
-	private int vID;
+public class Edge  implements Comparable<Edge>{
+	private int uID; //first node
+	private int vID; //second node
 	
 	private int weight;
 	
@@ -54,5 +54,21 @@ public class Edge {
 	public boolean isSelected() {
 		return this.selected;
 	}
+
+	@Override
+	public int compareTo(Edge e) {
+		
+		return this.weight - e.weight;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		String s = new String();
+		s += "first node : " + this.vID + ", second node : " + this.uID + ", weight :" + this.weight + "\n";
+		return s;
+	}
+	
+	
 
 }
