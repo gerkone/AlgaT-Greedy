@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -60,7 +61,7 @@ public class KruskalController {
 
 	private static final int SPACE_WIDTH = 666;
 
-	private static final int SPACE_HEIGHT = 772;
+	private static final int SPACE_HEIGHT = 406;
 
 	protected static final int DEFAULT_SPEED = 500;	//msec di step tra ogni ciclo del thread
 
@@ -84,6 +85,9 @@ public class KruskalController {
 	GridPane nodegrid;
 	@FXML
 	Slider nodesnumber, animationspeed;
+	
+	@FXML
+	TextArea testo;
 
 	@FXML
 	QuestionController questionDialogueController;
@@ -154,55 +158,20 @@ public class KruskalController {
 
 			@Override
 			public Void call() throws InterruptedException, IOException {
-				
-//				int n = nodes.size();
-//				
-//				int m = edges.size();
-//				
-//				int cWeight = 0;	//somma peso complessivo mst
-//				
-//				ArrayList<Edge> T = new ArrayList<Edge>();
-//				
-//				Mfset mf = new Mfset(n);
-//				
-//				ArrayList<Edge> A = new ArrayList<Edge>(edges);
-//				
-//				Collections.sort(A, new Comparator<Edge>() {
-//					@Override
-//					public int compare(Edge x, Edge y) {
-//						return x.getWeight() > y.getWeight() ? -1 : (x.getWeight() < y.getWeight()) ? 1 : 0;
-//					}
-//				});
-//				
-				Algorithms test = new Algorithms();
-				Set<Edge> a = new HashSet<Edge>();
-				test.kruskal((ArrayList<Edge>) edges, nodes.size(), edges.size(), a);
-				List<Edge> sorted = new ArrayList<Edge>(a);
+							
+				Algorithms algorithm= new Algorithms();
+				Set<Edge> set = new HashSet<Edge>();
+				algorithm.kruskal((ArrayList<Edge>) edges, nodes.size(), edges.size(), set);
+				List<Edge> sorted = new ArrayList<Edge>(set);
 				Collections.sort(sorted);
 				System.out.println("sorted : " + sorted);
+				String s = sorted.toString();
 				highlight(sorted);
+				testo.setText(s);
+				testo.setFont(new Font(30));
+				graphspace.getChildren().add(testo);
+				testo.toFront();
 				
-//				int c = 0;
-//				int i = 0;
-//
-//				while (c < n - 1 && i <= m) {
-//					if (mf.find(A.get(i).getuID()) != mf.find(A.get(i).getvID())) {
-//						mf.merge(A.get(i).getuID(), A.get(i).getvID());
-////						T.add(A.get(i));	superfluo per la simulazione
-//						
-//						highlightFragment(i);
-//						cWeight += A.get(i).getWeight();
-//						int speed = (int)animationspeed.getValue();
-//						if((speed >= 100) && (speed <= 1000)) {
-//							Thread.sleep(speed);
-//						} else {
-//							Thread.sleep(DEFAULT_SPEED);
-//						}
-//						
-//						c++;
-//					}
-//					i++;
-//				}
 				
 				drawMatrix();	//eseguita solo quando il thread ha finito
 				return null;
@@ -362,6 +331,7 @@ public class KruskalController {
 		edgespace.getChildren().clear();
 		graphspace.getChildren().add(nodegrid);
 		graphspace.getChildren().add(edgespace);
+		graphspace.getChildren().add(testo);
 		nodegrid.toFront();
 		nodes.forEach((n) -> {
 			nodegrid.add(n.getNode(), n.getCol(), n.getRow());
@@ -378,6 +348,7 @@ public class KruskalController {
 		edgespace.getChildren().clear();
 		graphspace.getChildren().add(nodegrid);
 		graphspace.getChildren().add(edgespace);
+		graphspace.getChildren().add(testo);
 		nodegrid.toFront();
 		nodes.forEach((n) -> {
 			((Circle) n.getNode().getChildren().get(0)).setStroke(Color.BLACK);
@@ -432,6 +403,8 @@ public class KruskalController {
 			edgespace.getChildren().clear();
 			graphspace.getChildren().add(nodegrid);
 			graphspace.getChildren().add(edgespace);
+			testo.setText("");
+			graphspace.getChildren().add(testo);
 			nodegrid.toFront();
 			newRandomGrid();
 			nodes.clear();
