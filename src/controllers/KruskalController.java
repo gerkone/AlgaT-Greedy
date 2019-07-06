@@ -63,7 +63,7 @@ public class KruskalController {
 
 	private static final int SPACE_HEIGHT = 406;
 
-	protected static final int DEFAULT_SPEED = 500;	//msec di step tra ogni ciclo del thread
+	protected static final int DEFAULT_SPEED = 500; // msec di step tra ogni ciclo del thread
 
 	private Stage stage;
 	private Parent root;
@@ -85,19 +85,19 @@ public class KruskalController {
 	GridPane nodegrid;
 	@FXML
 	Slider nodesnumber, animationspeed;
-	
+
 	@FXML
 	TextArea testo;
 
 	@FXML
 	QuestionController questionDialogueController;
-	
+
 	public KruskalController() {
 		nodes = new ArrayList<GraphNode>();
 		edges = new ArrayList<Edge>();
 
 		randomGrid = new ArrayList<Coord>();
-		
+
 		newRandomGrid();
 
 	}
@@ -118,20 +118,20 @@ public class KruskalController {
 			startup((int) nodesnumber.getValue());
 			draw();
 		} else if (event.getSource() == randomize) {
-			int rnd =  (new Random()).nextInt(GRID_COLUMNS * GRID_ROWS - 4) + 4;
+			int rnd = (new Random()).nextInt(GRID_COLUMNS * GRID_ROWS - 4) + 4;
 			nodesnumber.setValue(rnd);
 			startup(rnd);
 			draw();
 
 		} else if (event.getSource() == start) {
-			if((nodes.size() == 0) || (nodes.size() != (int) nodesnumber.getValue())) {
+			if ((nodes.size() == 0) || (nodes.size() != (int) nodesnumber.getValue())) {
 				startup((int) nodesnumber.getValue());
 				draw();
 			}
 			doKruskal();
 		} else if (event.getSource() == reset) {
 			reset();
-		} else if(event.getSource() == next) {
+		} else if (event.getSource() == next) {
 			getNextQuestion();
 		} else if (event.getSource() == back) {
 			reset();
@@ -158,10 +158,8 @@ public class KruskalController {
 
 			@Override
 			public Void call() throws InterruptedException, IOException {
-							
-				Algorithms algorithm= new Algorithms();
 				Set<Edge> set = new HashSet<Edge>();
-				algorithm.kruskal((ArrayList<Edge>) edges, nodes.size(), edges.size(), set);
+				application.Algorithms.kruskal((ArrayList<Edge>) edges, nodes.size(), edges.size(), set);
 				List<Edge> sorted = new ArrayList<Edge>(set);
 				Collections.sort(sorted);
 				System.out.println("sorted : " + sorted);
@@ -171,14 +169,13 @@ public class KruskalController {
 				testo.setFont(new Font(30));
 				graphspace.getChildren().add(testo);
 				testo.toFront();
-				
-				
-				drawMatrix();	//eseguita solo quando il thread ha finito
+
+				drawMatrix(); // eseguita solo quando il thread ha finito
 				return null;
 			}
 
 			private void highlight(List<Edge> list) throws InterruptedException {
-				for(Edge el : list) {
+				for (Edge el : list) {
 					el.getEdge().setStroke(Color.RED);
 					el.getEdge().setStrokeWidth(2);
 					int uID = el.getuID();
@@ -190,25 +187,24 @@ public class KruskalController {
 					Thread.sleep((long) animationspeed.getValue());
 				}
 			}
-			
+
 			private void highlightFragment(int i) {
 				edges.get(i).getEdge().setStroke(Color.RED);
 				edges.get(i).getEdge().setStrokeWidth(2);
 				int uID = edges.get(i).getuID();
 				int vID = edges.get(i).getvID();
-				
+
 				((Circle) getNodebyID(uID).getNode().getChildren().get(0)).setStroke(Color.RED);
 				((Circle) getNodebyID(vID).getNode().getChildren().get(0)).setStroke(Color.RED);
-				
+
 				edges.get(i).select();
-				
+
 				fragmentMatrix(uID, vID);
 			}
-			
-			
+
 		};
 
-		if(executionThread != null) {
+		if (executionThread != null) {
 			redraw();
 			drawMatrix();
 			executionThread.stop();
@@ -241,7 +237,7 @@ public class KruskalController {
 		addEdges();
 	}
 
-	private void addEdges() {
+	private void addEdges() {	//adds more edges to the connected graph
 
 		int edgesQty = (new Random()).nextInt(nodes.size());
 
@@ -256,21 +252,21 @@ public class KruskalController {
 				uID = nodeU.getID();
 				vID = nodeV.getID();
 			} while ((vID == uID) || (edgeExist(uID, vID)));
-			
+
 			edges.add(new Edge(uID, vID, (new Random()).nextInt(MAX_WEIGHT)));
 
 		}
 	}
 
 	private boolean edgeExist(int uID, int vID) {
-		for(Edge e : edges) {
-			if((e.getuID() == uID) || (e.getvID() == uID)) {
-				if((e.getuID() == vID) || (e.getvID() == vID)) {
+		for (Edge e : edges) {
+			if ((e.getuID() == uID) || (e.getvID() == uID)) {
+				if ((e.getuID() == vID) || (e.getvID() == vID)) {
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -294,7 +290,7 @@ public class KruskalController {
 			Label text1 = new Label();
 			text0.setText(String.valueOf(e.getWeight()));
 			text1.setText(String.valueOf(e.getWeight()));
-			
+
 //			if(e.isSelected()) {
 //				text0.setStyle("-fx-background-color: yellow");
 //				text1.setStyle("-fx-background-color: yellow");
@@ -303,7 +299,7 @@ public class KruskalController {
 			text0.setFont(new Font("Arial", 20));
 			text1.setFont(new Font("Arial", 20));
 
-			adjMatrix.add(text0, e.getuID(), e.getvID());	//node, uID = col, vID = row
+			adjMatrix.add(text0, e.getuID(), e.getvID()); // node, uID = col, vID = row
 			adjMatrix.setHalignment(text0, HPos.CENTER);
 			adjMatrix.add(text1, e.getvID(), e.getuID());
 			adjMatrix.setHalignment(text1, HPos.CENTER);
@@ -312,17 +308,17 @@ public class KruskalController {
 		adjMatrix.setGridLinesVisible(true);
 		matrixcontainer.getChildren().add(adjMatrix);
 	}
-	
+
 	private void fragmentMatrix(int uID, int vID) {
 		GridPane adjMatrix = (GridPane) matrixcontainer.getChildren().get(0);
 		for (Node node : adjMatrix.getChildren()) {
-			boolean found = ((adjMatrix.getRowIndex(node) == vID) && (adjMatrix.getColumnIndex(node) == uID)) || 
-					((adjMatrix.getRowIndex(node) == uID) && (adjMatrix.getColumnIndex(node) == vID));
-	        if(found) {
-	            node.setStyle("-fx-background-color: red");
-	            break;
-	        }
-	    }
+			boolean found = ((adjMatrix.getRowIndex(node) == vID) && (adjMatrix.getColumnIndex(node) == uID))
+					|| ((adjMatrix.getRowIndex(node) == uID) && (adjMatrix.getColumnIndex(node) == vID));
+			if (found) {
+				node.setStyle("-fx-background-color: red");
+				break;
+			}
+		}
 	}
 
 	private void draw() {
@@ -338,10 +334,11 @@ public class KruskalController {
 		});
 		edges.forEach((e) -> {
 			connect(e);
+			addWeight(e);
 		});
 		drawMatrix();
 	}
-	
+
 	private void redraw() {
 		graphspace.getChildren().clear();
 		nodegrid.getChildren().clear();
@@ -364,7 +361,7 @@ public class KruskalController {
 	}
 
 	private void connect(Edge e) {
-		
+
 		StackPane n1 = getNodebyID(e.getuID()).getNode();
 		StackPane n2 = getNodebyID(e.getvID()).getNode();
 		DoubleBinding startx = n1.layoutXProperty().add(SPACE_WIDTH / GRID_COLUMNS / 2);
@@ -375,13 +372,15 @@ public class KruskalController {
 		e.getEdge().startYProperty().bind(endx);
 		e.getEdge().endXProperty().bind(starty);
 		e.getEdge().endYProperty().bind(endy);
-		
+
 		edgespace.getChildren().add(e.getEdge());
-		
+	}
+
+	private void addWeight(Edge e) {
 		Text tWeight = new Text(Integer.toString(e.getWeight()));
 		tWeight.setFont(new Font("Verdana", 14));
-		tWeight.setX((e.getEdge().getStartX() + e.getEdge().getEndX()) / 2);
-		tWeight.setY((e.getEdge().getStartY() + e.getEdge().getEndY()) / 2);
+		tWeight.xProperty().bind(e.getEdge().startXProperty().add(e.getEdge().endXProperty()).multiply(0.5));
+		tWeight.yProperty().bind(e.getEdge().startYProperty().add(e.getEdge().endYProperty()).multiply(0.5));
 		edgespace.getChildren().add(tWeight);
 	}
 
@@ -396,7 +395,7 @@ public class KruskalController {
 
 	private void reset() {
 		try {
-			if(executionThread != null)
+			if (executionThread != null)
 				executionThread.stop();
 			graphspace.getChildren().clear();
 			nodegrid.getChildren().clear();
@@ -409,13 +408,13 @@ public class KruskalController {
 			newRandomGrid();
 			nodes.clear();
 			edges.clear();
-			
+
 			matrixcontainer.getChildren().clear();
 		} catch (Exception e) {
 			System.out.print("qualcosa e' andato storto");
 		}
 	}
-	
+
 	private void getNextQuestion() {
 		questionDialogueController.clear();
 		questionDialogueController.enableButtons();

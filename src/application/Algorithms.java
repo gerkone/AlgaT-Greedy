@@ -29,7 +29,6 @@ public class Algorithms {
 			if(time >= segs.get(i).getFt()) {
 				int t = maxPriority(queue);
 				time = time - segs.get(t).getDt();
-				segs.get(t).select();
 			}
 		}
 	}

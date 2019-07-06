@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Task;
@@ -63,7 +64,7 @@ public class ZainoController {
 
 	public void handleButtons(ActionEvent event) {
 		if (event.getSource() == start) {
-			if(stuff.size() == 0) {
+			if(stuff.size() < (int) objectpoolsize.getValue()) {
 				fillStuff();
 			}
 			manageSort();
@@ -193,8 +194,13 @@ public class ZainoController {
 						totgain+=stuff.get(i).getGain();
 					}
 					i++;
+					Platform.runLater(new Runnable() {
+			            @Override public void run() {
+			            	totalgain.setText(Integer.toString(totgain) + "€");
+			            	remainingcapacity.setText(Double.toString(Math.floor(capleft * 100)/100) + "kg");
+			            }
+			        });
 				}
-
 				return null;
 			}
 		};
