@@ -56,7 +56,17 @@
                            </children>
                         </HBox>
                         <Separator prefHeight="8.0" prefWidth="332.0" />
-                        <VBox fx:id="codecontainer" pickOnBounds="false" prefHeight="643.0" prefWidth="329.0" />
+                        <Pane>
+                           <children>
+                              <Label fx:id="showtime" text="Current Time:">
+                                 <padding>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </padding>
+                              </Label>
+                              <Separator layoutY="42.0" prefHeight="14.0" prefWidth="332.0" />
+                              <VBox fx:id="codecontainer" layoutY="56.0" pickOnBounds="false" prefHeight="587.0" prefWidth="329.0" />
+                           </children>
+                        </Pane>
                      </children>
                   </VBox>
                   <BorderPane centerShape="false" layoutY="759.0" prefHeight="39.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">

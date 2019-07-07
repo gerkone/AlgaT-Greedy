@@ -34,11 +34,6 @@ public class Algorithms {
 	}
 
 	public static Integer maxPriority(HashMap<Integer, Integer> queue) {
-//		return queue.entrySet()
-//				.stream()
-//				.max(Map.Entry.comparingByValue())
-//				.get()
-//				.getKey();
 		Integer max = 0;
 		for(Integer k : queue.keySet()) {
 			if(k > max) {

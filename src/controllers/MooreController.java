@@ -37,6 +37,7 @@ public class MooreController {
 	private ArrayList<String> lines;
 	
 	private Double spaceLeft = SHOWPANE_HEIGHT;
+	int time;	//moore time counter, used as global to be used in Labl showtime
 	
 	private Thread executionThread;
 
@@ -48,7 +49,7 @@ public class MooreController {
 	@FXML
 	private TextField numberfield_d, numberfield_f;
 	@FXML
-	private Label numberlable;
+	private Label numberlable, showtime;
 	@FXML
 	private VBox codecontainer, before, result;
 	@FXML
@@ -88,7 +89,7 @@ public class MooreController {
 			code.get(i).setText(lines.get(i));
 		}
 		
-//		questionDialogueController = new QuestionController(); grave errore, perde la referenza al controller assegnato via injection
+		time = 0;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -139,12 +140,13 @@ public class MooreController {
 			
 		    @Override public Void call() throws InterruptedException, IOException {
 		    	HashMap<Integer, Integer> queue = new HashMap<Integer, Integer>();
-				int time = 0;
+				
 				code.get(0).setStyle("-fx-background-color: CBCBCB;"); 
 				
 		    	for(int i = 0; i < segments.size(); i++) {
 		    		
 		    		segments.get(i).getBlock().setStyle("-fx-background-color: yellow;");
+		    		
 					nextHighlight(1, 2);
 					Thread.sleep((int) animationspeed.getValue());
 					
@@ -169,8 +171,8 @@ public class MooreController {
 						Thread.sleep((int) animationspeed.getValue());
 						
 						time = time - segments.get(t).getDt();
-						nextHighlight(6, 7);
 						
+						nextHighlight(6, 7);
 						Thread.sleep((int) animationspeed.getValue());
 						
 						segmentsSorted.add(new Segment(result.getHeight(), 
@@ -192,6 +194,7 @@ public class MooreController {
 					Platform.runLater(new Runnable() {
 			            @Override public void run() {
 			            	putSortedSegments();
+			            	showtime.setText("Current time:" + Integer.toString(time));
 			            }
 			        });
 					
@@ -214,6 +217,7 @@ public class MooreController {
 		softReset();
 		Algorithms.sortMoore(segments);
 		putSegments();
+		putMarkers();
 		
 		
 		code.get(0).setStyle("-fx-background-color: yellow;");
@@ -237,6 +241,8 @@ public class MooreController {
 		result.getChildren().clear();
 		info.getChildren().clear();
 		numberlable.setText("Aggiungi segmento di durata (vuoto per random)");
+		
+		time = 0;
 		//questionDialogueController.clear();
 	}
 	
@@ -252,6 +258,7 @@ public class MooreController {
 				code.get(i).setStyle("-fx-background-color: CBCBCB;");
 			}
 		}
+		time = 0;
 		segmentsSorted.clear();
 		before.getChildren().clear();
 		result.getChildren().clear();
