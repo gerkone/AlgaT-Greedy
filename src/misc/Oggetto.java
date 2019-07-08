@@ -61,6 +61,12 @@ public class Oggetto {
 		}
 	}
 	
+	public void updateText() {
+		((Text) this.oggetto.getLeft()).setText(Integer.toString(gain) + "€\t\t");
+		((Text) this.oggetto.getRight()).setText(Double.toString(weight).substring(0, Double.toString(weight).indexOf('.') + 2) + "kg    ");
+
+	}
+	
 	public BorderPane getObjectSprite() {
 		return oggetto;
 	}

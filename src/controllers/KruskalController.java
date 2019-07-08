@@ -416,9 +416,11 @@ public class KruskalController {
 	}
 
 	private void getNextQuestion() {
-		questionDialogueController.clear();
-		questionDialogueController.enableButtons();
-		questionDialogueController.setAll(misc.QuestionManager.getKruskalQuestion());
+		if(misc.QuestionManager.isLastKruskalAnswered()) {
+			questionDialogueController.clear();
+			questionDialogueController.enableButtons();
+			questionDialogueController.setAll(misc.QuestionManager.getKruskalQuestion());
+		}
 	}
 
 }

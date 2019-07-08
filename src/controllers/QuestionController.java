@@ -18,13 +18,16 @@ public class QuestionController {
 	
 	int right = -1;
 	
+	Question q;
+	
 	public void setAll(Question q) {
+		this.q = q;
+		questionArea.setText(q.getQuestion());
+		answer1.setText(q.getAnswer1());
+		answer2.setText(q.getAnswer2());
+		answer3.setText(q.getAnswer3());
+		answer4.setText(q.getAnswer4());
 		if(!q.isAnswered()) {
-			questionArea.setText(q.getQuestion());;
-			answer1.setText(q.getAnswer1());
-			answer2.setText(q.getAnswer2());
-			answer3.setText(q.getAnswer3());
-			answer4.setText(q.getAnswer4());
 			right = q.getRight();
 		} else {
 			disableButtons();
@@ -43,8 +46,6 @@ public class QuestionController {
 			} else if(q.getRight() == 4) {
 				answer4.setTextFill(Color.GREEN);
 			}
-			
-			questionArea.appendText("\r\nCORRECT!");
 		}
 	}
 	
@@ -61,7 +62,7 @@ public class QuestionController {
 		answer3.setTextFill(Color.RED);
 		answer4.setTextFill(Color.RED);
 		s.setTextFill(Color.GREEN);
-		
+		q.setAnswered(true);	
 		questionArea.appendText("\r\nCORRECT!");
 	}
 	
@@ -81,29 +82,31 @@ public class QuestionController {
 
 	@FXML
 	public void handleAnswer(ActionEvent event) {
-		if(event.getSource() == answer1) {
-			if(checkAnswer(1)) {
-				correct(answer1);
-			} else {
-				wrong(answer1);
-			}
-		} else if(event.getSource() == answer2) {
-			if(checkAnswer(2)) {
-				correct(answer2);
-			} else {
-				wrong(answer2);
-			}
-		} else if(event.getSource() == answer3) {
-			if(checkAnswer(3)) {
-				correct(answer3);
-			} else {
-				wrong(answer3);
-			}
-		} else if(event.getSource() == answer4) {
-			if(checkAnswer(4)) {
-				correct(answer4);
-			} else {
-				wrong(answer4);
+		if(q != null) {
+			if(event.getSource() == answer1) {
+				if(checkAnswer(1)) {
+					correct(answer1);
+				} else {
+					wrong(answer1);
+				}
+			} else if(event.getSource() == answer2) {
+				if(checkAnswer(2)) {
+					correct(answer2);
+				} else {
+					wrong(answer2);
+				}
+			} else if(event.getSource() == answer3) {
+				if(checkAnswer(3)) {
+					correct(answer3);
+				} else {
+					wrong(answer3);
+				}
+			} else if(event.getSource() == answer4) {
+				if(checkAnswer(4)) {
+					correct(answer4);
+				} else {
+					wrong(answer4);
+				}
 			}
 		}
 	}

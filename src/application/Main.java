@@ -43,37 +43,43 @@ public class Main extends Application {
 	
 			window.show();
 	
-			FadeTransition ft = new FadeTransition(Duration.millis(500), root);
+			FadeTransition ft = new FadeTransition(Duration.millis(1000), root);
 	
 			ft.setFromValue(1.0);
 	
 			ft.setToValue(0.0);
 			
-			ft.setDelay(Duration.millis(2000));
+			ft.setDelay(Duration.millis(1500));
 	
 			ft.play();
+			
+			Timeline timeline = new Timeline(
+					new KeyFrame(
+							Duration.millis(2500), ae -> {
+								load();
+							}));
 
+			timeline.play();
+
+		} else {
+			load();
 		}
 		
-		Timeline timeline = new Timeline(new KeyFrame(
 
-				Duration.millis(100), ae -> {
-					try {
-						root = (Pane) FXMLLoader.load(getClass().getResource("/menu.fxml"));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+	}
+	
+	private void load() {
+		try {
+			root = (Pane) FXMLLoader.load(getClass().getResource("/menu.fxml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-					Scene change = new Scene(root, MENU_WIDTH_t, MENU_HEIGHT_t);
+		Scene change = new Scene(root, MENU_WIDTH_t, MENU_HEIGHT_t);
 
-					window.setScene(change);
+		window.setScene(change);
 
-					window.show();
-
-				}));
-
-		timeline.play();
-
+		window.show();
 	}
 
 	public static void main(String[] args) {

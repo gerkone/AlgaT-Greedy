@@ -18,17 +18,24 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import misc.Segment;
 
 public class MooreController {
 
-	private static final int MAX_RAND = 20;
+	private static final int MAX_RAND = 30;
 	private static final int MAX_RAND_D = 100;
 	private static final Double  SHOWPANE_HEIGHT = 771.0;
+	private static final int MAX_SPEED = 2000;
+	private static final String LABLE_BOUNDS_ERROR = "Uno dei numeri eccede i limiti: durata<30, scadenza<100";
+	private static final String LABLE_BADCHAR_ERROR = "sono presenti caratteri non consentiti";
+	private static final String LABLE_DEFAULT = "Aggiungi segmento di durata (vuoto per random)";
+	private static final String LABLE_FULL_ERROR = "Limite elementi raggiunto";
 
 	private ArrayList<Segment> segments;
 	private ArrayList<Segment> segmentsSorted;
@@ -127,7 +134,7 @@ public class MooreController {
 		}
 	}
 
-	private void nextHighlight(int p, int s) throws InterruptedException {
+	private void nextHighlight(int p, int s) {
 
 		this.code.get(p).setStyle("-fx-background-color: CBCBCB;");
 
@@ -147,33 +154,27 @@ public class MooreController {
 		    		
 		    		segments.get(i).getBlock().setStyle("-fx-background-color: yellow;");
 		    		
-					nextHighlight(1, 2);
-					Thread.sleep((int) animationspeed.getValue());
+					step(1,2);
 					
 					queue.put(segments.get(i).getDt(), i);
 					
-					nextHighlight(2, 3);
-					Thread.sleep((int) animationspeed.getValue());
+					step(2,3);
 					
 					time = time + segments.get(i).getDt();
 					
-					nextHighlight(3, 4);
-					Thread.sleep((int) animationspeed.getValue());
+					step(3,4);
 					
 					if (time >= segments.get(i).getFt()) {
 						
-						nextHighlight(4, 5);
-						Thread.sleep((int) animationspeed.getValue());
+						step(4,5);
 						
 						int t = Algorithms.maxPriority(queue);
 						
-						nextHighlight(5, 6);
-						Thread.sleep((int) animationspeed.getValue());
+						step(5,62);
 						
 						time = time - segments.get(t).getDt();
 						
-						nextHighlight(6, 7);
-						Thread.sleep((int) animationspeed.getValue());
+						step(6,7);
 						
 						segmentsSorted.add(new Segment(result.getHeight(), 
 								segments.get(i).getFt(), 
@@ -181,14 +182,12 @@ public class MooreController {
 								segments.get(i).getID(), 
 								info.getHeight()));
 						
-						nextHighlight(7, 8);
-						Thread.sleep((int) animationspeed.getValue());
-						nextHighlight(8, 2);
-						Thread.sleep((int) animationspeed.getValue());
+						step(7,8);
+						step(8,2);
 						
 					}
 					else {
-						nextHighlight(4, 1);
+						step(4,1);
 					}
 					
 					Platform.runLater(new Runnable() {
@@ -207,6 +206,18 @@ public class MooreController {
 		    	code.get(9).setStyle("-fx-background-color: yellow;");
 				return null;
 		    }
+
+			private void step(int i, int j) {
+				try {
+					nextHighlight(i, j);
+					
+					int speed = (int) animationspeed.getValue();
+					executionThread.sleep(speed);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		};
 		
 		executionThread = new Thread(task);
@@ -218,14 +229,63 @@ public class MooreController {
 		Algorithms.sortMoore(segments);
 		putSegments();
 		putMarkers();
-		
-		
 		code.get(0).setStyle("-fx-background-color: yellow;");
 		doMoore();
 	}
 	
+	private void manageAdd() throws IOException {
+		softReset();
+		String dt = numberfield_d.getText();
+		String ft = numberfield_f.getText();
+		numberfield_d.clear();
+		numberfield_f.clear();
+		
+		int fti = 0;
+		int dti = 0;
+		if (!ft.isEmpty()) {
+			if (ft.matches("(0|[1-9]\\d*)")) {
+				fti = Integer.parseInt(ft);
+				if (fti <= 0 || fti > 100) {
+					numberlable.setText(LABLE_BOUNDS_ERROR);
+				}
+			} else {
+				numberlable.setText(LABLE_BADCHAR_ERROR);
+			}
+		} else {
+			dti = 1 + (new Random()).nextInt(MAX_RAND - 1);
+		}
+		
+		if (!dt.isEmpty()) {
+			if (dt.matches("(0|[1-9]\\d*)")) {
+				dti = Integer.parseInt(dt);
+				if ((dti <= 0 || dti > 20)) {
+					numberlable.setText(LABLE_BOUNDS_ERROR);
+				}
+			} else {
+				numberlable.setText(LABLE_BADCHAR_ERROR);
+			}
+		} else {
+			fti = dti + (new Random()).nextInt(MAX_RAND_D - dti);
+		}
+		if(fti > 0 && dti > 0) {
+			Segment tmpsegment = new Segment(before.getHeight(), fti, dti, getLastID() + 1, info.getHeight());
+			if(spaceLeft - tmpsegment.getHeight() >  0) {
+				spaceLeft -= tmpsegment.getHeight();
+				segments.add(tmpsegment);
+			} else {
+				int maxDuration = (int) (spaceLeft/before.getHeight() * misc.Segment.SCALE); 	//finds the max duration with the remaining free heigh
+				segments.add(new Segment(before.getHeight(), fti, maxDuration, getLastID() + 1, info.getHeight()));
+				spaceLeft = 0.0;
+				numberlable.setText(LABLE_FULL_ERROR);
+				numberfield_d.setDisable(true);
+				numberfield_f.setDisable(true);
+				add.setDisable(true);
+			}
+		}
+	}
+	
 	private void reset() {
-		numberlable.setText("Aggiungi segmento di durata (vuoto per random)");
+		numberlable.setText(LABLE_DEFAULT);
 		numberfield_d.setDisable(false);
 		numberfield_f.setDisable(false);
 		add.setDisable(false);
@@ -240,13 +300,13 @@ public class MooreController {
 		before.getChildren().clear();
 		result.getChildren().clear();
 		info.getChildren().clear();
-		numberlable.setText("Aggiungi segmento di durata (vuoto per random)");
 		
 		time = 0;
 		//questionDialogueController.clear();
 	}
 	
 	private void softReset() {
+		numberlable.setText(LABLE_DEFAULT);
 		if(codecontainer.getChildren().size() == 0) {
 			code.forEach((line) -> {
 				codecontainer.getChildren().add(line);
@@ -254,49 +314,15 @@ public class MooreController {
 		}
 		if(executionThread != null) {
 			executionThread.stop();
-			for (int i = 0; i < code.size(); i++) {
-				code.get(i).setStyle("-fx-background-color: CBCBCB;");
-			}
+			code.forEach((l) -> l.setStyle("-fx-background-color: CBCBCB;"));
+			segments.forEach((x) -> x.getBlock().setStyle(""));
 		}
 		time = 0;
+		showtime.setText("Current time:" + Integer.toString(time));
 		segmentsSorted.clear();
 		before.getChildren().clear();
 		result.getChildren().clear();
 		info.getChildren().clear();
-	}
-
-	private void manageAdd() throws IOException {
-		softReset();
-		String dt = numberfield_d.getText();
-		String ft = numberfield_f.getText();
-		numberfield_d.clear();
-		numberfield_f.clear();
-		
-		int fti = 0;
-		int dti = 0;
-		if (!dt.isEmpty() && !dt.isEmpty()) {
-			if (dt.matches("(0|[1-9]\\d*)") && ft.matches("(0|[1-9]\\d*)")) {
-				fti = Integer.parseInt(ft);
-				dti = Integer.parseInt(dt);
-			}
-		}
-		if (dti <= 0 || dti > 20)
-			dti = 1 + (new Random()).nextInt(MAX_RAND - 1);
-		if (fti <= 0 || fti > 100)
-			fti = dti + (new Random()).nextInt(MAX_RAND_D - dti);
-		Segment tmpsegment = new Segment(before.getHeight(), fti, dti, getLastID() + 1, info.getHeight());
-		if(spaceLeft - tmpsegment.getHeight() >  0) {
-			spaceLeft -= tmpsegment.getHeight();
-			segments.add(tmpsegment);
-		} else {
-			int maxDuration = (int) (spaceLeft/before.getHeight() * misc.Segment.SCALE); 	//finds the max duration with the remaining free heigh
-			segments.add(new Segment(before.getHeight(), fti, maxDuration, getLastID() + 1, info.getHeight()));
-			spaceLeft = 0.0;
-			numberlable.setText("Limite elementi raggiunto");
-			numberfield_d.setDisable(true);
-			numberfield_f.setDisable(true);
-			add.setDisable(true);
-		}
 	}
 	
 	private int getLastID() {
@@ -330,9 +356,11 @@ public class MooreController {
 	}
 
 	private void getNextQuestion() {
-		questionDialogueController.clear();
-		questionDialogueController.enableButtons();
-		questionDialogueController.setAll(misc.QuestionManager.getMooreQuestion());
+		if(misc.QuestionManager.isLastMooreAnswered()) {
+			questionDialogueController.clear();
+			questionDialogueController.enableButtons();
+			questionDialogueController.setAll(misc.QuestionManager.getMooreQuestion());
+		}
 	}
 
 }

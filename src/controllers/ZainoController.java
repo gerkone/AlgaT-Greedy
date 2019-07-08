@@ -7,8 +7,6 @@ import java.util.Comparator;
 import java.util.Random;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,11 +20,17 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import misc.Oggetto;
 
 public class ZainoController {
 	private static final int MAX_OGGETTI = 37; // objectare.width/oggetto.width (740/20)
+	
+	private static final String LABLE_BOUNDS_ERROR = "Valori fuori dai limiti";
+	private static final String LABLE_BADCHAR_ERROR = "Caratteri non consentiti";
+	private static final String LABLE_DEFAULT = "Aggiungi manualmente:";
+	private static final String LABLE_FULL_ERROR = "Limite elementi raggiunto";
 
 	private Stage stage;
 	private Parent root;
@@ -48,6 +52,8 @@ public class ZainoController {
 	VBox objectarea, bagarea;
 	@FXML
 	Label totalgain, remainingcapacity;
+	@FXML
+	Text addlabel;
 
 	@FXML
 	private QuestionController questionDialogueController;
@@ -117,54 +123,7 @@ public class ZainoController {
 			updateObjectPool();
 		}
 	}
-
-	private void manualAdd() {
-		if (stuff.size() + 1 < MAX_OGGETTI) {
-			String g = gainadd.getText();
-			String w = weightadd.getText();
-			Double weight =  Math.floor(((new Random()).nextDouble() * misc.Oggetto.MAX_WEIGHT * 100)) / 100 + 1;
-			int gain = (new Random()).nextInt(misc.Oggetto.MAX_GAIN) + 1;
-			if (w.matches("([,.0]|[1-9]\\d*)")) {
-				if(Double.parseDouble(w) < misc.Oggetto.MAX_WEIGHT + 1) {
-					weight = Double.parseDouble(g);
-				}
-			}
-			if (g.matches("(0|[1-9]\\d*)")) {
-				if(Integer.parseInt(g) < misc.Oggetto.MAX_GAIN + 1) {
-					gain = Integer.parseInt(g);
-				}
-			}
-			if (stuff.size() > 0) {
-				stuff.add(new Oggetto(gain, weight, stuff.get(stuff.size() - 1).getID() + 1, false)); // assegna id in base ai precedenti
-				goodstuff.add(new Oggetto(gain, weight, stuff.get(stuff.size() - 1).getID() + 1, true));
-			} else {
-				stuff.add(new Oggetto(gain, weight, 0, false));
-				goodstuff.add(new Oggetto(gain, weight, 0, true));
-			}
-			objectpoolsize.setValue(objectpoolsize.getValue() + 1);
-
-			gainadd.clear();
-			weightadd.clear();
-
-			updateObjectPool();
-		}
-	}
-
-	private void updateObjectPool() {	//sia bag che insieme completo hanno sempre tutti gli oggetti, ma visibili solo quelli non selezionati/selezionati
-		objectarea.getChildren().clear();
-		bagarea.getChildren().clear();
-		stuff.forEach((o) -> {
-			o.getObjectSprite().setStyle("-fx-background-color: lightblue");
-			objectarea.getChildren().add(o.getObjectSprite());
-		});
-
-		goodstuff.forEach((o) -> {
-			o.getObjectSprite().setStyle("-fx-background-color: lightgreen");
-			bagarea.getChildren().add(o.getObjectSprite());
-		});
-	}
-
-
+	
 	private void doRealBag() {
 		Task<Void> task = new Task<Void>() {
 
@@ -178,13 +137,14 @@ public class ZainoController {
 					Thread.sleep((int) animationspeed.getValue());
 					tmp = getGoodStuffByID(stuff.get(i).getID());	//lista goodstuff non ordinata, preso relativo oggetto da ID e non da indice i
 					if (stuff.get(i).getWeight() >= capleft) {
-						int partialGain = (int) ((int) (stuff.get(i).getGain())*(capleft/stuff.get(i).getWeight()));
+						int partialGain = (int) ((stuff.get(i).getGain())*(capleft/stuff.get(i).getWeight()));
 						tmp.setGain(partialGain);
 						tmp.setWeight(capleft);
 						tmp.setSelected(true);
+						tmp.updateText();
 						totgain+=partialGain;
-						stuff.get(i).setWeight(stuff.get(i).getWeight() - capleft);
-						stuff.get(i).setGain(stuff.get(i).getGain() - partialGain);
+//						stuff.get(i).setWeight(stuff.get(i).getWeight() - capleft);		evitare altrimenti si modifica lista di oggetti
+//						stuff.get(i).setGain(stuff.get(i).getGain() - partialGain);
 						stuff.get(i).getObjectSprite().setStyle("-fx-background-color: red");
 						tmp.getObjectSprite().setStyle("-fx-background-color: red");
 						capleft = 0.0;
@@ -210,6 +170,74 @@ public class ZainoController {
 		}
 		executionThread = new Thread(task);
 		executionThread.start();
+	}
+
+	private void manualAdd() {
+		addlabel.setText(LABLE_DEFAULT);
+		if (stuff.size() + 1 < MAX_OGGETTI) {
+			String g = gainadd.getText();
+			String w = weightadd.getText();
+			int gain = 0;
+			Double weight = 0.0;
+			if(!w.isEmpty()) {
+				if (w.matches("([,.0]|[1-9]\\d*)")) {
+					if(Double.parseDouble(w) < misc.Oggetto.MAX_WEIGHT + 1) {
+						weight = Double.parseDouble(g);
+					} else {
+						addlabel.setText(LABLE_BOUNDS_ERROR);
+					}
+				} else {
+					addlabel.setText(LABLE_BADCHAR_ERROR);
+				}
+			} else {
+				weight =  Math.floor(((new Random()).nextDouble() * misc.Oggetto.MAX_WEIGHT * 100)) / 100 + 1;
+			}
+			
+			if(!g.isEmpty()) {
+				if (g.matches("(0|[1-9]\\d*)")) {
+					if(Integer.parseInt(g) < misc.Oggetto.MAX_GAIN + 1) {
+						gain = Integer.parseInt(g);
+					} else {
+						addlabel.setText(LABLE_BOUNDS_ERROR);
+					}
+				} else {
+					addlabel.setText(LABLE_BADCHAR_ERROR);
+				}
+			} else {
+				gain = (new Random()).nextInt(misc.Oggetto.MAX_GAIN) + 1;
+			}
+			
+			if (stuff.size() > 0) {
+				stuff.add(new Oggetto(gain, weight, stuff.get(stuff.size() - 1).getID() + 1, false)); // assegna id in base ai precedenti
+				goodstuff.add(new Oggetto(gain, weight, stuff.get(stuff.size() - 1).getID() + 1, true));
+			} else {
+				stuff.add(new Oggetto(gain, weight, 0, false));
+				goodstuff.add(new Oggetto(gain, weight, 0, true));
+			}
+			
+			objectpoolsize.setValue(objectpoolsize.getValue() + 1);
+
+			gainadd.clear();
+			weightadd.clear();
+
+			updateObjectPool();
+		} else {
+			addlabel.setText(LABLE_FULL_ERROR);
+		}
+	}
+
+	private void updateObjectPool() {	//sia bag che insieme completo hanno sempre tutti gli oggetti, ma visibili solo quelli non selezionati/selezionati
+		objectarea.getChildren().clear();
+		bagarea.getChildren().clear();
+		stuff.forEach((o) -> {
+			o.getObjectSprite().setStyle("-fx-background-color: lightblue");
+			objectarea.getChildren().add(o.getObjectSprite());
+		});
+
+		goodstuff.forEach((o) -> {
+			o.getObjectSprite().setStyle("-fx-background-color: lightgreen");
+			bagarea.getChildren().add(o.getObjectSprite());
+		});
 	}
 
 	private void manageSort() {
@@ -274,6 +302,8 @@ public class ZainoController {
 		stuff.forEach((o) -> {
 			o.setSelected(false);
 		});
+		capleft = 0.0;
+		totgain = 0;
 		remainingcapacity.setText("0");
 		totalgain.setText("0");
 	}
@@ -283,13 +313,17 @@ public class ZainoController {
 		goodstuff.clear();
 		objectarea.getChildren().clear();
 		bagarea.getChildren().clear();
+		capleft = 0.0;
+		totgain = 0;
 		remainingcapacity.setText("0");
 		totalgain.setText("0");
 	}
 
 	private void getNextQuestion() {
-		questionDialogueController.clear();
-		questionDialogueController.enableButtons();
-		questionDialogueController.setAll(misc.QuestionManager.getZainoQuestion());
+		if(misc.QuestionManager.isLastZainoAnswered()) {
+			questionDialogueController.clear();
+			questionDialogueController.enableButtons();
+			questionDialogueController.setAll(misc.QuestionManager.getZainoQuestion());
+		}
 	}
 }
