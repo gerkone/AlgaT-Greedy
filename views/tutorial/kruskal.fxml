@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -13,7 +14,7 @@
         <items>
             <Pane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <VBox prefHeight="800.0" prefWidth="326.0" style="-fx-background-color: CBCBCB;">
+                  <VBox prefHeight="704.0" prefWidth="326.0" style="-fx-background-color: CBCBCB;">
                      <children>
                         <Button fx:id="back" mnemonicParsing="false" onAction="#handleButtons" text="&lt;Back" />
                         <HBox prefHeight="29.0" prefWidth="326.0">
@@ -49,31 +50,35 @@
                            </children>
                         </HBox>
                         <Separator prefHeight="15.0" prefWidth="326.0" />
-                        <GridPane alignment="CENTER" prefHeight="94.0" prefWidth="326.0" style="-fx-background-color: ABABAB;">
-                          <columnConstraints>
-                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Button fx:id="randomize" mnemonicParsing="false" onAction="#handleButtons" text="Randomize" GridPane.columnIndex="1" />
-                              <Button fx:id="next" mnemonicParsing="false" onAction="#handleButtons" text="Next Question" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Button fx:id="start" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Start" textFill="#14ae09" />
-                              <Button fx:id="reset" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Reset" textFill="#fc0000" GridPane.rowIndex="1" />
-                           </children>
-                        </GridPane>
                         <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
                         <HBox prefHeight="0.0" prefWidth="332.0">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocità di animazione:" wrappingWidth="126.400390625" />
-                              <Slider fx:id="animationspeed" max="1000.0" min="100.0" prefHeight="14.0" prefWidth="255.0" value="500.0" />
+                              <Slider fx:id="animationspeed" max="2000.0" min="100.0" prefHeight="14.0" prefWidth="255.0" value="500.0">
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin></Slider>
+                              <ImageView fx:id="playpause" fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                      </children>
                   </VBox>
+                  <GridPane alignment="CENTER" layoutY="704.0" prefHeight="94.0" prefWidth="326.0" style="-fx-background-color: ABABAB;">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button fx:id="randomize" mnemonicParsing="false" onAction="#handleButtons" text="Randomize" GridPane.columnIndex="1" />
+                        <Button fx:id="next" mnemonicParsing="false" onAction="#handleButtons" text="Next Question" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="start" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Start" textFill="#14ae09" />
+                        <Button fx:id="reset" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Reset" textFill="#fc0000" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
                </children>
             </Pane>
             <TabPane>

@@ -21,8 +21,15 @@
                         <Separator prefHeight="10.0" prefWidth="331.0" style="-fx-background-color: 000000;" />
                         <HBox prefHeight="0.0" prefWidth="332.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocità di animazione:" wrappingWidth="126.400390625" />
-                              <Slider fx:id="animationspeed" max="2000.0" min="10.0" prefHeight="14.0" prefWidth="255.0" value="500.0" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocità di animazione:" wrappingWidth="126.400390625">
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin></Text>
+                              <Slider fx:id="animationspeed" max="2000.0" min="100.0" prefHeight="14.0" prefWidth="255.0" value="500.0">
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin></Slider>
+                              <ImageView fx:id="playpause" fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="5.0" top="5.0" />
@@ -40,7 +47,10 @@
                                     <Insets bottom="10.0" />
                                  </padding>
                               </Label>
-                              <Slider fx:id="bagsize" blockIncrement="1.0" majorTickUnit="1.0" max="100.0" min="2.0" minorTickCount="0" prefHeight="14.0" prefWidth="170.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
+                              <Slider fx:id="bagsize" blockIncrement="1.0" majorTickUnit="1.0" max="100.0" min="2.0" minorTickCount="0" prefHeight="14.0" prefWidth="170.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0">
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin></Slider>
                            </children>
                            <VBox.margin>
                               <Insets bottom="10.0" top="10.0" />
@@ -58,7 +68,10 @@
                                     <Insets bottom="10.0" />
                                  </padding>
                               </Label>
-                              <Slider fx:id="objectpoolsize" blockIncrement="1.0" majorTickUnit="1.0" max="37.0" min="2.0" minorTickCount="0" prefHeight="14.0" prefWidth="170.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0" />
+                              <Slider fx:id="objectpoolsize" blockIncrement="1.0" majorTickUnit="1.0" max="37.0" min="2.0" minorTickCount="0" prefHeight="14.0" prefWidth="170.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="2.0">
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin></Slider>
                            </children>
                         </HBox>
                         <HBox prefHeight="0.0" prefWidth="332.0">
@@ -76,6 +89,9 @@
                               <Separator orientation="VERTICAL" prefHeight="27.0" prefWidth="22.0" />
                               <Button fx:id="add" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="43.0" text="add" />
                            </children>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
                         </HBox>
                         <Separator prefHeight="10.0" prefWidth="331.0" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modalità di preferenza:">
@@ -149,7 +165,7 @@
                         </VBox>
                      </children>
                   </VBox>
-                  <BorderPane centerShape="false" layoutY="729.0" prefHeight="65.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">
+                  <BorderPane centerShape="false" layoutY="733.0" prefHeight="65.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">
                      <left>
                         <Button fx:id="reset" mnemonicParsing="false" onAction="#handleButtons" prefHeight="25.0" prefWidth="60.0" text="Reset" textFill="#fc0000" BorderPane.alignment="CENTER" />
                      </left>
@@ -210,7 +226,7 @@
                       </Tab>
                       <Tab closable="false" text="Questions">
                       		<content>
-                      			<!-- <fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/> -->
+                      				<fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/>
                       		</content>
                       </Tab>
                     </tabs>

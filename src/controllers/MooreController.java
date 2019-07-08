@@ -44,7 +44,8 @@ public class MooreController {
 	private ArrayList<String> lines;
 	
 	private Double spaceLeft = SHOWPANE_HEIGHT;
-	int time;	//moore time counter, used as global to be used in Labl showtime
+	private int time;	//moore time counter, used as global to be used in Labl showtime
+	private boolean threadPause;
 	
 	private Thread executionThread;
 
@@ -65,6 +66,10 @@ public class MooreController {
 	private Pane info;
 	@FXML
 	private SplitPane showcontainer;
+	@FXML
+	private ImageView playpause;
+	
+	private Image play, pause;
 	
 	@FXML
 	private QuestionController questionDialogueController;	//controller of the embedded questionnaire, named as rule "<fx:id>Controller" to allow code injection
@@ -96,8 +101,33 @@ public class MooreController {
 			code.get(i).setText(lines.get(i));
 		}
 		
+		play = new Image("/play.png");
+		pause = new Image("/pause.png");
+		
+		threadPause = false;
+		
 		time = 0;
 	}
+	
+	public void initialize() { //usato solo per pausare/riprendere l'esecuzione del thread
+
+        animationspeed.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+            if(executionThread != null) {
+            	if(newValue.intValue() >= 2000) {
+					threadPause = true;
+            		playpause.setImage(pause);
+            	} else {
+            		threadPause = false;
+            		playpause.setImage(play);
+            	}
+            }
+
+
+        });
+
+    }
+	
 
 	@SuppressWarnings("deprecation")
 	@FXML
@@ -170,7 +200,7 @@ public class MooreController {
 						
 						int t = Algorithms.maxPriority(queue);
 						
-						step(5,62);
+						step(5,6);
 						
 						time = time - segments.get(t).getDt();
 						
@@ -213,6 +243,9 @@ public class MooreController {
 					
 					int speed = (int) animationspeed.getValue();
 					executionThread.sleep(speed);
+					while(threadPause) {
+						executionThread.sleep(1000);
+					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -323,6 +356,7 @@ public class MooreController {
 		before.getChildren().clear();
 		result.getChildren().clear();
 		info.getChildren().clear();
+		playpause.setImage(play);
 	}
 	
 	private int getLastID() {

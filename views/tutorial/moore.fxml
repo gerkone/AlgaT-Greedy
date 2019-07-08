@@ -52,10 +52,11 @@
                         <HBox prefHeight="0.0" prefWidth="332.0">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Velocità di animazione:" wrappingWidth="126.400390625" />
-                              <Slider fx:id="animationspeed" max="2000.0" min="10.0" prefHeight="14.0" prefWidth="255.0" value="500.0">
+                              <Slider fx:id="animationspeed" max="2000.0" min="100.0" prefHeight="14.0" prefWidth="183.0" value="500.0">
                                  <HBox.margin>
                                     <Insets top="5.0" />
                                  </HBox.margin></Slider>
+                              <ImageView fx:id="playpause" fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </HBox>
                         <Separator prefHeight="8.0" prefWidth="332.0" />
@@ -119,7 +120,7 @@
                       </Tab>
                       <Tab closable="false" text="Questions">
                       		<content>
-                      		<fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/>
+                      			 <fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/>
                       		</content>
                       </Tab>
                     </tabs>

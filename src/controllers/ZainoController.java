@@ -19,6 +19,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -37,23 +39,28 @@ public class ZainoController {
 	private Thread executionThread;
 	private int totgain;
 	private Double capleft;
+	private boolean threadPause;
 
 	@FXML
-	Slider animationspeed, bagsize, objectpoolsize;
+	private Slider animationspeed, bagsize, objectpoolsize;
 	@FXML
-	Button start, reset, next, back, add, fill;
+	private Button start, reset, next, back, add, fill;
 	@FXML
-	ToggleGroup sortoptions;
+	private ToggleGroup sortoptions;
 	@FXML
-	RadioButton sortg, sortw, sortgw;
+	private RadioButton sortg, sortw, sortgw;
 	@FXML
-	TextField gainadd, weightadd;
+	private TextField gainadd, weightadd;
 	@FXML
-	VBox objectarea, bagarea;
+	private VBox objectarea, bagarea;
 	@FXML
-	Label totalgain, remainingcapacity;
+	private Label totalgain, remainingcapacity;
 	@FXML
-	Text addlabel;
+	private Text addlabel;
+	@FXML
+	private ImageView playpause;
+	
+	private Image play, pause;
 
 	@FXML
 	private QuestionController questionDialogueController;
@@ -66,7 +73,31 @@ public class ZainoController {
 		this.goodstuff = new ArrayList<Oggetto>();
 		totgain = 0;
 		capleft = 0.0;
+		
+		play = new Image("/play.png");
+		pause = new Image("/pause.png");
+		
+		threadPause = false;
 	}
+	
+	public void initialize() { //usato solo per pausare/riprendere l'esecuzione del thread
+
+        animationspeed.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+            if(executionThread != null) {
+            	if(newValue.intValue() >= 2000) {
+					threadPause = true;
+            		playpause.setImage(pause);
+            	} else {
+            		threadPause = false;
+            		playpause.setImage(play);
+            	}
+            }
+
+
+        });
+
+    }
 
 	public void handleButtons(ActionEvent event) {
 		if (event.getSource() == start) {
@@ -99,7 +130,7 @@ public class ZainoController {
 				stage.show();
 			}
 		} else if (event.getSource() == add) {
-			manualAdd();
+			manageAdd();
 		} else if (event.getSource() == fill) {
 			fillStuff();
 		} else if (event.getSource() == next) {
@@ -135,6 +166,9 @@ public class ZainoController {
 				while (i < stuff.size() && capleft > 0) {
 					stuff.get(i).getObjectSprite().setStyle("-fx-background-color: yellow");
 					Thread.sleep((int) animationspeed.getValue());
+					while(threadPause) {
+						executionThread.sleep(1000);
+					}
 					tmp = getGoodStuffByID(stuff.get(i).getID());	//lista goodstuff non ordinata, preso relativo oggetto da ID e non da indice i
 					if (stuff.get(i).getWeight() >= capleft) {
 						int partialGain = (int) ((stuff.get(i).getGain())*(capleft/stuff.get(i).getWeight()));
@@ -172,7 +206,7 @@ public class ZainoController {
 		executionThread.start();
 	}
 
-	private void manualAdd() {
+	private void manageAdd() {
 		addlabel.setText(LABLE_DEFAULT);
 		if (stuff.size() + 1 < MAX_OGGETTI) {
 			String g = gainadd.getText();
@@ -306,6 +340,7 @@ public class ZainoController {
 		totgain = 0;
 		remainingcapacity.setText("0");
 		totalgain.setText("0");
+		playpause.setImage(play);
 	}
 
 	private void reset() {

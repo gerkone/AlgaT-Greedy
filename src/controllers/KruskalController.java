@@ -23,6 +23,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -39,7 +41,7 @@ import misc.Mfset;
 
 public class KruskalController {
 
-	class Coord {
+	private class Coord {
 		int x;
 		int y;
 
@@ -74,20 +76,24 @@ public class KruskalController {
 	private ArrayList<Coord> randomGrid;
 
 	private Thread executionThread;
+	private boolean threadPause;
 
 	@FXML
-	Pane graphspace, edgespace, matrixcontainer;
+	private Pane graphspace, edgespace, matrixcontainer;
 	@FXML
-	Button randomize, reset, start, back, draw, next;
+	private Button randomize, reset, start, back, draw, next;
 	@FXML
-	Label nodelabel;
+	private Label nodelabel;
 	@FXML
-	GridPane nodegrid;
+	private GridPane nodegrid;
 	@FXML
-	Slider nodesnumber, animationspeed;
-
+	private Slider nodesnumber, animationspeed;
 	@FXML
-	TextArea testo;
+	private TextArea testo;
+	@FXML
+	private ImageView playpause;
+	
+	private Image play, pause;
 
 	@FXML
 	QuestionController questionDialogueController;
@@ -98,9 +104,31 @@ public class KruskalController {
 
 		randomGrid = new ArrayList<Coord>();
 
+		play = new Image("/play.png");
+		pause = new Image("/pause.png");
+		threadPause = false;
 		newRandomGrid();
 
 	}
+	
+	public void initialize() { //usato solo per pausare/riprendere l'esecuzione del thread
+
+        animationspeed.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+            if(executionThread != null) {
+            	if(newValue.intValue() >= 2000) {
+					threadPause = true;
+            		playpause.setImage(pause);
+            	} else {
+            		threadPause = false;
+            		playpause.setImage(play);
+            	}
+            }
+
+
+        });
+
+    }
 
 	private void newRandomGrid() {
 		randomGrid.clear();
@@ -115,19 +143,20 @@ public class KruskalController {
 	@FXML
 	public void handleButtons(ActionEvent event) {
 		if (event.getSource() == draw) {
-			startup((int) nodesnumber.getValue());
+			manageStart((int) nodesnumber.getValue());
 			draw();
 		} else if (event.getSource() == randomize) {
 			int rnd = (new Random()).nextInt(GRID_COLUMNS * GRID_ROWS - 4) + 4;
 			nodesnumber.setValue(rnd);
-			startup(rnd);
+			manageStart(rnd);
 			draw();
 
 		} else if (event.getSource() == start) {
 			if ((nodes.size() == 0) || (nodes.size() != (int) nodesnumber.getValue())) {
-				startup((int) nodesnumber.getValue());
+				manageStart((int) nodesnumber.getValue());
 				draw();
 			}
+			playpause.setImage(play);
 			doKruskal();
 		} else if (event.getSource() == reset) {
 			reset();
@@ -185,6 +214,9 @@ public class KruskalController {
 					el.select();
 					fragmentMatrix(uID, vID);
 					Thread.sleep((long) animationspeed.getValue());
+					while(threadPause) {
+						executionThread.sleep(1000);
+					}
 				}
 			}
 
@@ -213,7 +245,7 @@ public class KruskalController {
 		executionThread.start();
 	}
 
-	private void startup(int d) {
+	private void manageStart(int d) {
 		reset();
 		int row;
 		int col;
