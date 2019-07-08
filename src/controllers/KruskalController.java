@@ -388,6 +388,7 @@ public class KruskalController {
 			e.getEdge().setStrokeWidth(1);
 			e.deselect();
 			connect(e);
+			addWeight(e);
 		});
 		drawMatrix();
 	}
