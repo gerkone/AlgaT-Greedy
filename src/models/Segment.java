@@ -20,6 +20,8 @@ public class Segment {
 	private Line decayMark;
 	private Text marker;
 	
+	private boolean badProgram;
+	
 	private int ft;	//decay time
 	private int dt;	//duration
 	private int ID;
@@ -29,6 +31,7 @@ public class Segment {
 		this.ft = ft;
 		this.dt = dt;
 		this.ID = id;
+		this.badProgram = false;
 		
 		block = new BorderPane();
 		block.setLeft(new Text("duration:" + Integer.toString(dt)));
@@ -45,8 +48,22 @@ public class Segment {
 		decayMark.setStartY(infoHeight * (ft / SCALE));
 		decayMark.setEndY(infoHeight * (ft / SCALE));
 		marker = new Text();
-		marker.setText(Integer.toString(ID));
+		marker.setText(Integer.toString(ID) + " | " + Integer.toString(ft));
 		marker.setY((decayMark.getEndY() + decayMark.getStartY()) * 0.5);
+	}
+
+	public boolean isBadProgram() {
+		return badProgram;
+	}
+
+	public void setBadProgram(boolean badProgram, int deleteTime) {
+		this.badProgram = badProgram;
+		if(badProgram) {
+			this.block.setStyle("-fx-background-color: red;");
+//			this.block.setBottom(new Text("rimosso a tempo:" + Integer.toString(deleteTime)));
+		} else {
+			this.block.setStyle("");
+		}
 	}
 
 	public Line getDecayMark() {

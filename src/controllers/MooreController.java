@@ -31,7 +31,7 @@ public class MooreController {
 	private static final int MAX_RAND_D = 100;
 	
 	
-	private static final Double  SHOWPANE_HEIGHT = 771.0;
+	private static final Double  SHOWPANE_HEIGHT = 741.0;
 	private static final int MAX_SPEED = 2000;
 	private static final String LABLE_BOUNDS_ERROR = "Uno dei numeri eccede i limiti: durata<30, scadenza<100";
 	private static final String LABLE_BADCHAR_ERROR = "sono presenti caratteri non consentiti";
@@ -179,7 +179,7 @@ public class MooreController {
 		    @Override public Void call() throws InterruptedException, IOException {
 //		    	HashMap<Integer, Integer> queue = new HashMap<Integer, Integer>();
 		    	HeapQueue<Integer> queue = new HeapQueue<Integer>(segments.size() + 1);
-				
+
 				code.get(0).setStyle("-fx-background-color: CBCBCB;"); 
 				
 		    	for(int i = 0; i < segments.size(); i++) {
@@ -208,17 +208,32 @@ public class MooreController {
 						
 						step(6,7);
 						
-						segmentsSorted.add(new Segment(result.getHeight(), 
-								segments.get(i).getFt(), 
-								segments.get(i).getDt(), 
-								segments.get(i).getID(), 
-								info.getHeight()));
+						segments.get(i).setBadProgram(true, time + segments.get(t).getDt());
+						
+//						Segment tmp2 = new Segment(result.getHeight(), 
+//								segments.get(i).getFt(), 
+//								segments.get(i).getDt(), 
+//								segments.get(i).getID(), 
+//								info.getHeight());
+//						
+//						tmp.getBlock().setStyle("-fx-background-color: red;");
+//						
+//						bad.add(tmp);
 						
 						step(7,8);
 						step(8,2);
 						
 					}
 					else {
+						
+						Segment tmp = new Segment(result.getHeight(), 	//se non è programma in ritardo lo aggiungiamo a quelli in orario
+								segments.get(i).getFt(), 
+								segments.get(i).getDt(), 
+								segments.get(i).getID(), 
+								info.getHeight());
+						
+						segmentsSorted.add(tmp);
+						
 						step(4,1);
 					}
 					
@@ -228,10 +243,11 @@ public class MooreController {
 			            	showtime.setText("Current time:" + Integer.toString(time));
 			            }
 			        });
-					
-					segments.get(i).getBlock().setStyle("");
+					if(!segments.get(i).isBadProgram())	//i segments marcati con bad (quindi che finiscono dopo il tempo) sono lasciati evidenziati, così da poter essere visti
+						segments.get(i).getBlock().setStyle("");
 					
 				}
+		    	
 		    	code.forEach((l) -> {
 		    		l.setStyle("");
 		    	});

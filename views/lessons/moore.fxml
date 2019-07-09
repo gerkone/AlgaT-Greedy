@@ -92,8 +92,8 @@
             </AnchorPane>
             <Pane>
                <children>
-                  <Pane prefHeight="28.0" prefWidth="35.0" style="-fx-background-color: CBCBCB;" />
-                  <Pane fx:id="info" layoutY="30.0" pickOnBounds="false" prefHeight="771.0" prefWidth="35.0" />
+                  <Pane prefHeight="60.0" prefWidth="35.0" style="-fx-background-color: CBCBCB;" />
+                  <Pane fx:id="info" layoutY="60.0" pickOnBounds="false" prefHeight="741.0" prefWidth="35.0" />
                </children>
             </Pane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="798.0" prefWidth="675.0" style="-fx-background-color: DFDFDF;">
@@ -106,12 +106,22 @@
                                 <items>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <VBox fx:id="before" prefHeight="771.0" prefWidth="310.0" />
+                                          <VBox fx:id="before" layoutY="30.0" prefHeight="741.0" prefWidth="309.0" />
+                                          <Text layoutX="3.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
                                        </children>
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <VBox fx:id="result" prefHeight="772.0" prefWidth="298.0" />
+                                          <VBox fx:id="result" layoutY="30.0" prefHeight="741.0" prefWidth="305.0" />
+                                          <Text layoutX="3.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="S*">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
                                        </children>
                                     </AnchorPane>
                                 </items>
@@ -120,7 +130,7 @@
                       </Tab>
                       <Tab closable="false" text="Questions">
                       		<content>
-                      			 <fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/>
+                      			 <!-- <fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/> -->
                       		</content>
                       </Tab>
                     </tabs>
