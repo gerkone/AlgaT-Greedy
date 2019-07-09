@@ -1,4 +1,4 @@
-package misc;
+package models;
 
 import java.io.IOException;
 

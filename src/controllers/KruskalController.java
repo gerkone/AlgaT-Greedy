@@ -3,13 +3,11 @@ package controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import application.Algorithms;
 import javafx.beans.binding.DoubleBinding;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -35,9 +33,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import misc.Edge;
-import misc.GraphNode;
-import misc.Mfset;
+import models.Edge;
+import models.GraphNode;
 
 public class KruskalController {
 
@@ -66,6 +63,8 @@ public class KruskalController {
 	private static final int SPACE_HEIGHT = 406;
 
 	protected static final int DEFAULT_SPEED = 500; // msec di step tra ogni ciclo del thread
+
+	private static final int MAX_SPEED = 2000;
 
 	private Stage stage;
 	private Parent root;
@@ -116,7 +115,7 @@ public class KruskalController {
         animationspeed.valueProperty().addListener((observable, oldValue, newValue) -> {
 
             if(executionThread != null) {
-            	if(newValue.intValue() >= 2000) {
+            	if(newValue.intValue() >= MAX_SPEED) {
 					threadPause = true;
             		playpause.setImage(pause);
             	} else {
@@ -220,19 +219,19 @@ public class KruskalController {
 				}
 			}
 
-			private void highlightFragment(int i) {
-				edges.get(i).getEdge().setStroke(Color.RED);
-				edges.get(i).getEdge().setStrokeWidth(2);
-				int uID = edges.get(i).getuID();
-				int vID = edges.get(i).getvID();
-
-				((Circle) getNodebyID(uID).getNode().getChildren().get(0)).setStroke(Color.RED);
-				((Circle) getNodebyID(vID).getNode().getChildren().get(0)).setStroke(Color.RED);
-
-				edges.get(i).select();
-
-				fragmentMatrix(uID, vID);
-			}
+//			private void highlightFragment(int i) {
+//				edges.get(i).getEdge().setStroke(Color.RED);
+//				edges.get(i).getEdge().setStrokeWidth(2);
+//				int uID = edges.get(i).getuID();
+//				int vID = edges.get(i).getvID();
+//
+//				((Circle) getNodebyID(uID).getNode().getChildren().get(0)).setStroke(Color.RED);
+//				((Circle) getNodebyID(vID).getNode().getChildren().get(0)).setStroke(Color.RED);
+//
+//				edges.get(i).select();
+//
+//				fragmentMatrix(uID, vID);
+//			}
 
 		};
 

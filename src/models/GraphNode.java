@@ -1,13 +1,11 @@
-package misc;
+package models;
 
-import java.awt.Label;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 

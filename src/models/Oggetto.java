@@ -1,6 +1,5 @@
-package misc;
+package models;
 
-import java.math.BigDecimal;
 import java.util.Random;
 
 import javafx.scene.layout.Border;

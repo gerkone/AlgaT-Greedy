@@ -8,49 +8,6 @@
 
 <Pane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MenuController">
    <children>
-      <Accordion maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
-        <panes>
-          <TitledPane animated="true" text="Process Handling">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <TextArea editable="false" prefHeight="286.0" prefWidth="600.0" text="Algoritmo di Moore (1968)&#10;L'algoritmo di Moore è un algoritmo in scelta Greedy utilizzato per selezionare l'esecuzione &#10;più efficiente nel problema dei programmi in ritardo, ovvero dato l'insieme S di programmi, &#10;trovare il sottoinsieme S* tale che minimizzi il numero di programmi che non rispettano la&#10;propria scadenza.&#10;Gli step dell'algoritmo sono i seguenti:&#10;✦ Sequenza iniziale S: programmi ordinati per scadenze di crescenti&#10;✦ Si cerca il primo programma p in ritardo nella sequenza S&#10;✦ Si elimina il più lungo programma p’ tra quelli che precedono p, ottenendo la sequenza S’&#10;✦ Si itera il procedimento su S’, fino ad ottenere S* senza programmi in ritardo&#10;✦ Si eseguono quindi i programmi in S*, seguiti dai programmi in ritardo&#10;&#10;La visualizzazione della lezione è la seguente: La barra a sinistra presenta la possibilità&#10;di aggiungere &quot;programmi&quot; alla coda di esecuzione, oltre che visualizzare la linea di codice &#10;in corrente esecuzione, e regolare la velocità dell'animazione; ognuno di questi &#10;programmi sarà caratterizzato da un tempo di esecuzione e una scadenza. Quest'ultima è &#10;visibile in un pannello centrale, rappresentata da una linea che segna il tempo in cui il &#10;programma scadrà.&#10;Nei pannelli di destra sarà possibile vedere la coda di esecuzione ( insieme S,  nel riquadro &#10;più a sinistra) e i programmi riordinati (insieme S*, riquadro a destra), tutto ciò animato &#10;evidenziando il programma correntemente sotto esame.">
-                           <font>
-                              <Font size="13.5" />
-                           </font>
-                        </TextArea>
-                        <Button fx:id="toMoore" layoutX="534.0" layoutY="285.0" mnemonicParsing="false" onAction="#go" text="enter" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </TitledPane>
-          <TitledPane animated="true" text="Kruskal">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Button fx:id="toPrim" layoutX="532.0" layoutY="285.0" mnemonicParsing="false" onAction="#go" text="enter" />
-                        <TextArea layoutY="-2.0" prefHeight="287.0" prefWidth="600.0" text="Algoritmo di Kruskal (1956)&#10;L'algoritmo di Kruskal è un algoritmo Greedy che trova il minimo albero di copertura (o MST) di &#10;un grafo pesato non orientato. l'algoritmo segue il seguente ragionamento&#10;✦ Ingrandire i frammenti di un albero di copertura minimo connettendoli fra di loro fino ad &#10;     avere l’albero complessivo&#10;✦ Si individua un arco sicuro scegliendo un arco [u,v] di peso minimo tra tutti gli archi che &#10;     connettono due distinti frammenti della foresta&#10;✦ L’algoritmo è greedy perché ad ogni passo si aggiunge alla foresta un arco con il peso minore&#10;✦ L’arco scelto è il miglior arco uscente comune ai due frammenti&#10;&#10;La visualizzazione della lezione è la seguente: nel pannello sinistro si trova uno slider per&#10;impostare il numero di nodi del grafo da generare, e la possibilità di modificare la velocità &#10;di animazione. Nella parte destra invece si hanno due Tab: il tab &quot;visualizer&quot; è diviso in due&#10;sezioni, una grafica dove verrà rappresentato il grafo con i suoi archi, e passo dopo passo&#10;evidenziato il MST trovato, e una testuale che descriverà i vari archi che fanno parte del MST.&#10;Mentre il tab Matrix mostrerà la matrice di adiacenza con i rispettivi pesi.&#10;">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </TextArea>
-                     </children></AnchorPane>
-            </content>
-          </TitledPane>
-          <TitledPane animated="true" text="Zaino">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Button fx:id="toZaino" layoutX="532.0" layoutY="285.0" mnemonicParsing="false" onAction="#go" text="enter" />
-                        <TextArea prefHeight="289.0" prefWidth="600.0" text="Zaino reale, scelta Greedy&#10;L'algoritmo a scelta greedy per risolvere il problema dello zaino con oggetti frazionabili; &#10;infatti solo lo zaino &quot;reale&quot; (ovvero con oggetti partizionabili) restituisce la soluzione&#10;migliore con la scelta Greedy, mentre lo zaino &quot;0/1&quot; (ovvero non partizionabile, con &#10;oggetti discreti) non gode della scelta greedy.&#10;Data una serie di oggetti, ognuno avente massa e rendita e uno zaino di capienza finita&#10;trovare la sottosequenza che massimizza il guadagno, riempiendo lo &quot;zaino&quot;.&#10;Gli step dell'algoritmo sono i seguenti:&#10;✦ Pool iniziale di oggetti da &quot;rubare&quot; ordinati con varie strategie&#10;✦ Si sceglie il primo oggetto della sequenza ordinata se la capienza dello zaino lo permette&#10;✦ Se un oggetto ha capacità maggiore di quella residua lo si può partizionare&#10;&#10;La visualizzazione della lezione è la seguente: nel pannello a sinistra si trovano varie &#10;impostazioni sulle modalità di esecuzione (strategia di ordinamento), possibilità di &#10;aggiungere nuovi oggetti all'insieme principale, regolare la capienza dello zaino e la&#10;velocità di animazione. Il pannello a destra è invece diviso in pool di oggetti, e oggetti&#10;nello zaino: man mano che l'animazione avanza gli oggetti spariranno dal pool principale&#10;per apparire nello zaino.">
-                           <font>
-                              <Font size="13.5" />
-                           </font>
-                        </TextArea>
-                     </children></AnchorPane>
-            </content>
-          </TitledPane>
-        </panes>
-      </Accordion>
+      <Accordion fx:id="lessonmenu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" />
    </children>
 </Pane>

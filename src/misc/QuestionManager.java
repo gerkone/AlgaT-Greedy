@@ -2,6 +2,8 @@ package misc;
 
 import java.util.ArrayList;
 
+import models.Question;
+
 @SuppressWarnings("serial")
 public class QuestionManager {
 	

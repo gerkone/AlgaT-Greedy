@@ -1,4 +1,4 @@
-package misc;
+package models;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;

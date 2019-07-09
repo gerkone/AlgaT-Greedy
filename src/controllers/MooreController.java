@@ -2,7 +2,6 @@ package controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import application.Algorithms;
@@ -18,18 +17,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import misc.Segment;
+import misc.HeapQueue;
+import models.Segment;
 
 public class MooreController {
 
 	private static final int MAX_RAND = 30;
 	private static final int MAX_RAND_D = 100;
+	
+	
 	private static final Double  SHOWPANE_HEIGHT = 771.0;
 	private static final int MAX_SPEED = 2000;
 	private static final String LABLE_BOUNDS_ERROR = "Uno dei numeri eccede i limiti: durata<30, scadenza<100";
@@ -114,7 +115,7 @@ public class MooreController {
         animationspeed.valueProperty().addListener((observable, oldValue, newValue) -> {
 
             if(executionThread != null) {
-            	if(newValue.intValue() >= 2000) {
+            	if(newValue.intValue() >= MAX_SPEED) {
 					threadPause = true;
             		playpause.setImage(pause);
             	} else {
@@ -173,10 +174,11 @@ public class MooreController {
 	}
 
 	private void doMoore() {
-		Task task = new Task<Void>() {
+		Task<Void> task = new Task<Void>() {
 			
 		    @Override public Void call() throws InterruptedException, IOException {
-		    	HashMap<Integer, Integer> queue = new HashMap<Integer, Integer>();
+//		    	HashMap<Integer, Integer> queue = new HashMap<Integer, Integer>();
+		    	HeapQueue<Integer> queue = new HeapQueue<Integer>(segments.size() + 1);
 				
 				code.get(0).setStyle("-fx-background-color: CBCBCB;"); 
 				
@@ -186,7 +188,7 @@ public class MooreController {
 		    		
 					step(1,2);
 					
-					queue.put(segments.get(i).getDt(), i);
+					queue.insert(i, segments.get(i).getDt());
 					
 					step(2,3);
 					
@@ -198,7 +200,7 @@ public class MooreController {
 						
 						step(4,5);
 						
-						int t = Algorithms.maxPriority(queue);
+						int t = queue.deleteMax();
 						
 						step(5,6);
 						
@@ -306,7 +308,7 @@ public class MooreController {
 				spaceLeft -= tmpsegment.getHeight();
 				segments.add(tmpsegment);
 			} else {
-				int maxDuration = (int) (spaceLeft/before.getHeight() * misc.Segment.SCALE); 	//finds the max duration with the remaining free heigh
+				int maxDuration = (int) (spaceLeft/before.getHeight() * models.Segment.SCALE); 	//finds the max duration with the remaining free heigh
 				segments.add(new Segment(before.getHeight(), fti, maxDuration, getLastID() + 1, info.getHeight()));
 				spaceLeft = 0.0;
 				numberlable.setText(LABLE_FULL_ERROR);

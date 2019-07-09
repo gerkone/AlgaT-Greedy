@@ -24,10 +24,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import misc.Oggetto;
+import models.Oggetto;
 
 public class ZainoController {
 	private static final int MAX_OGGETTI = 37; // objectare.width/oggetto.width (740/20)
+	private static final int MAX_SPEED = 2000;
 	
 	private static final String LABLE_BOUNDS_ERROR = "Valori fuori dai limiti";
 	private static final String LABLE_BADCHAR_ERROR = "Caratteri non consentiti";
@@ -85,7 +86,7 @@ public class ZainoController {
         animationspeed.valueProperty().addListener((observable, oldValue, newValue) -> {
 
             if(executionThread != null) {
-            	if(newValue.intValue() >= 2000) {
+            	if(newValue.intValue() >= MAX_SPEED) {
 					threadPause = true;
             		playpause.setImage(pause);
             	} else {
@@ -146,8 +147,8 @@ public class ZainoController {
 			int gain;
 			Double weight;
 			for (int i = 0; i < size; i++) {
-				weight =  Math.floor(((new Random()).nextDouble() * misc.Oggetto.MAX_WEIGHT * 100)) / 100 + 1;
-				gain = (new Random()).nextInt(misc.Oggetto.MAX_GAIN) + 1;
+				weight =  Math.floor(((new Random()).nextDouble() * models.Oggetto.MAX_WEIGHT * 100)) / 100 + 1;
+				gain = (new Random()).nextInt(models.Oggetto.MAX_GAIN) + 1;
 				stuff.add(new Oggetto(gain, weight, i, false));
 				goodstuff.add(new Oggetto(gain, weight, i, true));
 			}
@@ -215,7 +216,7 @@ public class ZainoController {
 			Double weight = 0.0;
 			if(!w.isEmpty()) {
 				if (w.matches("([,.0]|[1-9]\\d*)")) {
-					if(Double.parseDouble(w) < misc.Oggetto.MAX_WEIGHT + 1) {
+					if(Double.parseDouble(w) < models.Oggetto.MAX_WEIGHT + 1) {
 						weight = Double.parseDouble(g);
 					} else {
 						addlabel.setText(LABLE_BOUNDS_ERROR);
@@ -224,12 +225,12 @@ public class ZainoController {
 					addlabel.setText(LABLE_BADCHAR_ERROR);
 				}
 			} else {
-				weight =  Math.floor(((new Random()).nextDouble() * misc.Oggetto.MAX_WEIGHT * 100)) / 100 + 1;
+				weight =  Math.floor(((new Random()).nextDouble() * models.Oggetto.MAX_WEIGHT * 100)) / 100 + 1;
 			}
 			
 			if(!g.isEmpty()) {
 				if (g.matches("(0|[1-9]\\d*)")) {
-					if(Integer.parseInt(g) < misc.Oggetto.MAX_GAIN + 1) {
+					if(Integer.parseInt(g) < models.Oggetto.MAX_GAIN + 1) {
 						gain = Integer.parseInt(g);
 					} else {
 						addlabel.setText(LABLE_BOUNDS_ERROR);
@@ -238,7 +239,7 @@ public class ZainoController {
 					addlabel.setText(LABLE_BADCHAR_ERROR);
 				}
 			} else {
-				gain = (new Random()).nextInt(misc.Oggetto.MAX_GAIN) + 1;
+				gain = (new Random()).nextInt(models.Oggetto.MAX_GAIN) + 1;
 			}
 			
 			if (stuff.size() > 0) {
