@@ -60,6 +60,7 @@ public class MenuController {
 	    			
 	    			if(scene != null) {
 	    		        stage.setScene(scene);
+	    		        stage.setResizable(false);
 	    		        stage.show();
 	    			}
 	            }

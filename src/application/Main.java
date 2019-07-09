@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -39,6 +40,12 @@ public class Main extends Application {
 	
 			window.setTitle("AlgaT Greedy");
 	
+			try {
+				window.getIcons().add(new Image("monopoly_running.png"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			window.setScene(scene);
 	
 			window.show();
@@ -78,6 +85,8 @@ public class Main extends Application {
 		Scene change = new Scene(root, MENU_WIDTH_t, MENU_HEIGHT_t);
 
 		window.setScene(change);
+		
+		window.setResizable(false);
 
 		window.show();
 	}
