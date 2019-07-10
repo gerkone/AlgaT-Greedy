@@ -12,6 +12,12 @@ class HeapItem<T extends Comparable<? super T>> {
         this.priority = priority;
         this.pos = pos;
     }
+
+	@Override
+	public String toString() {
+		return "HeapItem [value=" + value + ", priority=" + priority + ", pos=" + pos + "]";
+	}
+    
 }
 
 
@@ -37,7 +43,7 @@ public class HeapQueue<T extends Comparable<? super T>> {
         array.add(new_item);
 
         int i = used_slots;
-        while (i > 0 && array.get(i).priority < array.get(parent(i)).priority) {
+        while (i > 0 && array.get(i).priority > array.get(parent(i)).priority) {
             swap(i, parent(i));
             i = parent(i);
         }
@@ -72,17 +78,19 @@ public class HeapQueue<T extends Comparable<? super T>> {
         swap(0, used_slots);
 
         maxHeapRestore(0);
-
-        return array.get(0).value;
+        
+        T valore = array.get(used_slots).value;
+        array.remove(used_slots);
+        return valore;
     }
 
-    void decrease(HeapItem<T> x, int p) {
+    void increase(HeapItem<T> x, int p) {
         if (p > x.priority) {
             return;
         }
         x.priority = p;
         int i = x.pos;
-        while (i>0 && array.get(i).priority < array.get(parent(i)).priority) {
+        while (i>0 && array.get(i).priority > array.get(parent(i)).priority) {
             swap(i, parent(i));
             i = parent(i);
         }
@@ -110,4 +118,11 @@ public class HeapQueue<T extends Comparable<? super T>> {
     private int right(int i) {
         return (2 * i) + 1;
     }
+
+	@Override
+	public String toString() {
+		return "HeapQueue [array=" + array + "]";
+	}
+    
+    
 }

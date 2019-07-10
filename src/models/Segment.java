@@ -56,7 +56,7 @@ public class Segment {
 		return badProgram;
 	}
 
-	public void setBadProgram(boolean badProgram, int deleteTime) {
+	public void setBadProgram(boolean badProgram) {
 		this.badProgram = badProgram;
 		if(badProgram) {
 			this.block.setStyle("-fx-background-color: red;");
