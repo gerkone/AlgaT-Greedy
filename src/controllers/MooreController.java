@@ -179,8 +179,12 @@ public class MooreController {
 		    @Override public Void call() throws InterruptedException, IOException {
 //		    	HashMap<Integer, Integer> queue = new HashMap<Integer, Integer>();
 		    	HeapQueue<Integer> queue = new HeapQueue<Integer>(segments.size() + 1);
-
-				code.get(0).setStyle("-fx-background-color: CBCBCB;"); 
+		    	
+		    	code.get(0).setStyle("-fx-background-color: yellow;");
+		    	
+		    	Thread.sleep((int) animationspeed.getValue());
+		    	
+				step(0,1);
 				
 		    	for(int i = 0; i < segments.size(); i++) {
 		    		
@@ -208,7 +212,7 @@ public class MooreController {
 						
 						step(6,7);
 						
-						segments.get(i).setBadProgram(true, time + segments.get(t).getDt());
+						segments.get(t).setBadProgram(true);
 						
 //						Segment tmp2 = new Segment(result.getHeight(), 
 //								segments.get(i).getFt(), 
@@ -224,29 +228,39 @@ public class MooreController {
 						step(8,2);
 						
 					}
-					else {
-						
-						Segment tmp = new Segment(result.getHeight(), 	//se non è programma in ritardo lo aggiungiamo a quelli in orario
-								segments.get(i).getFt(), 
-								segments.get(i).getDt(), 
-								segments.get(i).getID(), 
-								info.getHeight());
-						
-						segmentsSorted.add(tmp);
-						
-						step(4,1);
-					}
-					
 					Platform.runLater(new Runnable() {
 			            @Override public void run() {
-			            	putSortedSegments();
 			            	showtime.setText("Current time:" + Integer.toString(time));
 			            }
 			        });
+					
 					if(!segments.get(i).isBadProgram())	//i segments marcati con bad (quindi che finiscono dopo il tempo) sono lasciati evidenziati, così da poter essere visti
 						segments.get(i).getBlock().setStyle("");
 					
+					step(4,1);
+					
 				}
+		    	segments.forEach((s) -> {
+		    		if(!s.isBadProgram()) {
+						try {
+							Segment tmp = new Segment(result.getHeight(), 	//se non è programma in ritardo lo aggiungiamo a quelli in orario
+									s.getFt(), 
+									s.getDt(), 
+									s.getID(), 
+									info.getHeight());
+							segmentsSorted.add(tmp);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+		    		}
+		    	});
+		    	
+		    	Platform.runLater(new Runnable() {
+		            @Override public void run() {
+		            	putSortedSegments();
+		            }
+		        });
 		    	
 		    	code.forEach((l) -> {
 		    		l.setStyle("");
@@ -280,7 +294,6 @@ public class MooreController {
 		Algorithms.sortMoore(segments);
 		putSegments();
 		putMarkers();
-		code.get(0).setStyle("-fx-background-color: yellow;");
 		doMoore();
 	}
 	
@@ -335,6 +348,7 @@ public class MooreController {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void reset() {
 		numberlable.setText(LABLE_DEFAULT);
 		numberfield_d.setDisable(false);
@@ -356,6 +370,7 @@ public class MooreController {
 		//questionDialogueController.clear();
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void softReset() {
 		numberlable.setText(LABLE_DEFAULT);
 		if(codecontainer.getChildren().size() == 0) {
