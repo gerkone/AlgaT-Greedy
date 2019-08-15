@@ -60,17 +60,50 @@
                            </children>
                         </HBox>
                         <Separator prefHeight="8.0" prefWidth="332.0" />
-                        <Pane>
+                        <Pane prefHeight="24.0" prefWidth="340.0">
                            <children>
                               <Label fx:id="showtime" text="Current Time:">
                                  <padding>
-                                    <Insets bottom="10.0" top="10.0" />
+                                    <Insets bottom="10.0" />
                                  </padding>
                               </Label>
-                              <Separator layoutY="42.0" prefHeight="14.0" prefWidth="332.0" />
-                              <VBox fx:id="codecontainer" layoutY="56.0" pickOnBounds="false" prefHeight="587.0" prefWidth="329.0" />
+                              <Separator layoutX="4.0" layoutY="20.0" prefHeight="14.0" prefWidth="332.0" />
                            </children>
                         </Pane>
+                        <Separator prefHeight="8.0" prefWidth="332.0" />
+                        <VBox fx:id="codecontainer" prefHeight="214.0" prefWidth="340.0" style="-fx-background-color: EEEEEE;" />
+                        <Separator prefHeight="8.0" prefWidth="332.0" />
+                        <VBox prefHeight="383.0" prefWidth="340.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Coda con priorità (realizzata con max-Heap) :">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="5.0" top="5.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <HBox prefHeight="27.0" prefWidth="335.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ID:" wrappingWidth="166.13671875">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                    <Separator orientation="VERTICAL" prefHeight="200.0" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Priorità:" wrappingWidth="166.080078125">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="548.0" prefWidth="332.0">
+                                 <children>
+                                    <VBox fx:id="valuesbox" prefHeight="548.0" prefWidth="167.0" />
+                                    <Separator orientation="VERTICAL" prefHeight="200.0" />
+                                    <VBox fx:id="prioritiesbox" prefHeight="548.0" prefWidth="166.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </children>
                   </VBox>
                   <BorderPane centerShape="false" layoutY="759.0" prefHeight="39.0" prefWidth="332.0" style="-fx-background-color: ABABAB;">

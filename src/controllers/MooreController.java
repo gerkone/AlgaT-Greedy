@@ -10,6 +10,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import misc.HeapItem;
 import misc.HeapQueue;
 import models.Segment;
 
@@ -60,7 +62,7 @@ public class MooreController {
 	@FXML
 	private Label numberlable, showtime;
 	@FXML
-	private VBox codecontainer, before, result;
+	private VBox codecontainer, before, result, valuesbox, prioritiesbox;
 	@FXML
 	private Slider animationspeed;
 	@FXML
@@ -110,7 +112,11 @@ public class MooreController {
 		time = 0;
 	}
 	
-	public void initialize() { //usato solo per pausare/riprendere l'esecuzione del thread
+	public void initialize() {
+		
+		code.forEach((line) -> {
+			codecontainer.getChildren().add(line);
+		});
 
         animationspeed.valueProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -167,7 +173,7 @@ public class MooreController {
 
 	private void nextHighlight(int p, int s) {
 
-		this.code.get(p).setStyle("-fx-background-color: CBCBCB;");
+		this.code.get(p).setStyle("-fx-background-color: EEEEEE;");
 
 		this.code.get(s).setStyle("-fx-background-color: yellow;");
 		
@@ -196,7 +202,7 @@ public class MooreController {
 		    		
 					step(1,2);
 					
-					queue.insert(i, segments.get(i).getDt());
+					queue.insert(segments.get(i).getID(), segments.get(i).getDt());
 		    		System.out.println("heap :" + queue);
 					
 					step(2,3);
@@ -209,26 +215,17 @@ public class MooreController {
 						
 						step(4,5);
 						
-						int t = queue.deleteMax();
-						System.out.println("deleted : "+ t);
+						int mID = queue.deleteMax();
+						System.out.println("deleted : "+ mID);
 						
 						step(5,6);
 						
-						time = time - segments.get(t).getDt();
+						Segment found = getSegByID(mID);
+						time = time - found.getDt();
 						
 						step(6,7);
 						
-						segments.get(t).setBadProgram(true);
-						
-//						Segment tmp2 = new Segment(result.getHeight(), 
-//								segments.get(i).getFt(), 
-//								segments.get(i).getDt(), 
-//								segments.get(i).getID(), 
-//								info.getHeight());
-//						
-//						tmp.getBlock().setStyle("-fx-background-color: red;");
-//						
-//						bad.add(tmp);
+						found.setBadProgram(true);
 						
 						step(7,8);
 						step(8,2);
@@ -237,7 +234,9 @@ public class MooreController {
 					Platform.runLater(new Runnable() {
 			            @Override public void run() {
 			            	showtime.setText("Current time:" + Integer.toString(time));
+			            	updateQueue(queue);
 			            }
+
 			        });
 					
 					if(!segments.get(i).isBadProgram())	//i segments marcati con bad (quindi che finiscono dopo il tempo) sono lasciati evidenziati, così da poter essere visti
@@ -265,6 +264,7 @@ public class MooreController {
 		    	Platform.runLater(new Runnable() {
 		            @Override public void run() {
 		            	putSortedSegments();
+		            	updateQueue(queue);
 		            }
 		        });
 		    	
@@ -294,6 +294,7 @@ public class MooreController {
 		executionThread = new Thread(task);
 		executionThread.start();
 	}
+	
 
 	private void manageStart() throws Exception {
 		softReset();
@@ -302,6 +303,7 @@ public class MooreController {
 		putMarkers();
 		doMoore();
 	}
+	
 	
 	private void manageAdd() throws IOException {
 		softReset();
@@ -317,25 +319,27 @@ public class MooreController {
 				fti = Integer.parseInt(ft);
 				if (fti <= 0 || fti > 100) {
 					numberlable.setText(LABLE_BOUNDS_ERROR);
-				}
-			} else {
-				numberlable.setText(LABLE_BADCHAR_ERROR);
-			}
-		} else {
-			dti = 1 + (new Random()).nextInt(MAX_RAND - 1);
-		}
-		
-		if (!dt.isEmpty()) {
-			if (dt.matches("(0|[1-9]\\d*)")) {
-				dti = Integer.parseInt(dt);
-				if ((dti <= 0 || dti > 20)) {
-					numberlable.setText(LABLE_BOUNDS_ERROR);
+					fti = 0;
 				}
 			} else {
 				numberlable.setText(LABLE_BADCHAR_ERROR);
 			}
 		} else {
 			fti = dti + (new Random()).nextInt(MAX_RAND_D - dti);
+		}
+		
+		if (!dt.isEmpty()) {
+			if (dt.matches("(0|[1-9]\\d*)")) {
+				dti = Integer.parseInt(dt);
+				if ((dti <= 0 || dti > 30)) {
+					numberlable.setText(LABLE_BOUNDS_ERROR);
+					dti = 0;
+				}
+			} else {
+				numberlable.setText(LABLE_BADCHAR_ERROR);
+			}
+		} else {
+			dti = 1 + (new Random()).nextInt(MAX_RAND - 1);
 		}
 		if(fti > 0 && dti > 0) {
 			Segment tmpsegment = new Segment(before.getHeight(), fti, dti, getLastID() + 1, info.getHeight());
@@ -354,6 +358,7 @@ public class MooreController {
 		}
 	}
 	
+	
 	@SuppressWarnings("deprecation")
 	private void reset() {
 		numberlable.setText(LABLE_DEFAULT);
@@ -364,17 +369,20 @@ public class MooreController {
 		if(executionThread != null)
 			executionThread.stop();
 		for (int i = 0; i < code.size(); i++) {
-			code.get(i).setStyle("-fx-background-color: CBCBCB;");
+			code.get(i).setStyle("-fx-background-color: EEEEEE;");
 		}
 		segments.clear();
 		segmentsSorted.clear();
 		before.getChildren().clear();
 		result.getChildren().clear();
 		info.getChildren().clear();
+		prioritiesbox.getChildren().clear();
+		valuesbox.getChildren().clear();
 		
 		time = 0;
 		//questionDialogueController.clear();
 	}
+	
 	
 	@SuppressWarnings("deprecation")
 	private void softReset() {
@@ -386,7 +394,7 @@ public class MooreController {
 		}
 		if(executionThread != null) {
 			executionThread.stop();
-			code.forEach((l) -> l.setStyle("-fx-background-color: CBCBCB;"));
+			code.forEach((l) -> l.setStyle("-fx-background-color: EEEEEE;"));
 			segments.forEach((x) -> x.getBlock().setStyle(""));
 		}
 		time = 0;
@@ -396,7 +404,33 @@ public class MooreController {
 		result.getChildren().clear();
 		info.getChildren().clear();
 		playpause.setImage(play);
+		prioritiesbox.getChildren().clear();
+		valuesbox.getChildren().clear();
 	}
+	
+	
+	private void updateQueue(HeapQueue<Integer> queue) {
+		prioritiesbox.getChildren().clear();
+		valuesbox.getChildren().clear();
+		
+		Label val;
+		Label pri;
+		
+		for(HeapItem<Integer> e :queue.getQueue()) {
+			val = new Label();
+			pri = new Label();
+			
+			val.setText(Integer.toString(e.value));
+			val.setPadding(new Insets(2,2,2,2));
+			valuesbox.getChildren().add(val);
+			
+			pri.setText(Integer.toString(e.priority));
+			pri.setPadding(new Insets(2,2,2,2));
+			prioritiesbox.getChildren().add(pri);
+		}
+		
+	}
+	
 	
 	private int getLastID() {
 		if(segments.size() > 0) {
@@ -405,6 +439,16 @@ public class MooreController {
 			return -1;
 		}
 	}
+	
+	private Segment getSegByID(int id) {
+		for(Segment s : segments) {
+			if(s.getID() == id) {
+				return s;
+			}
+		}
+		return null;
+	}
+	
 
 	private void putSortedSegments() {
 		result.getChildren().clear();
@@ -413,12 +457,14 @@ public class MooreController {
 		});
 	}
 	
+	
 	private void putSegments() {
 		before.getChildren().clear();
 		segments.forEach((b) -> {
 			before.getChildren().add(b.getBlock());
 		});
 	}
+	
 	
 	private void putMarkers() {
 		info.getChildren().clear();
@@ -427,6 +473,7 @@ public class MooreController {
 			info.getChildren().add(s.getMarker());
 		});
 	}
+	
 
 	private void getNextQuestion() {
 		if(misc.QuestionManager.isLastMooreAnswered()) {
