@@ -12,17 +12,18 @@ import javafx.scene.text.TextBoundsType;
 public class GraphNode {
 	private StackPane node;
 	private Integer ID;
-	private List<Edge> edges;	//TODO: aggingere anche lista di archi in ogni nodo maggiore precisione
+	private List<Edge> edges;
+	private List<GraphNode> adjacents;
 	private int row;
 	private int col;
 
 
 	public GraphNode(Integer ID, int row, int col) {
-		super();
 		this.row = row;
 		this.col = col;
 		this.ID = ID;
 		this.edges = new ArrayList<Edge>();
+		this.adjacents = new ArrayList<GraphNode>();
 		this.node = new StackPane();
 		Circle circle = new Circle();
 		circle.setRadius(20);
@@ -37,10 +38,10 @@ public class GraphNode {
 		node.getChildren().add(text);
 	}
 	
-	public void addEdge(Edge id) {
-		if ((id.getuID() != this.ID) || (id.getvID() != this.ID)) {
-			edges.add(id);
-		}
+	public void addEdge(GraphNode node) {
+		
+		if (!adjacents.contains(node))
+			adjacents.add(node);
 	}
 	
 	
@@ -62,11 +63,11 @@ public class GraphNode {
 	}
 
 	public boolean hasEdges() {
-		return edges.size() != 0;
+		return adjacents.size() > 0;
 	}
 
-	public boolean exists(Edge tmp) {
-		return edges.contains(tmp);
+	public boolean exists(GraphNode node) {
+		return adjacents.contains(node);
 	}
 	
 }

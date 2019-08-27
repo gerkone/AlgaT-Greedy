@@ -71,20 +71,19 @@ public class KruskalController {
 
 	private List<GraphNode> nodes;
 	private List<Edge> edges;
-
 	private ArrayList<Coord> randomGrid;
 
 	private Thread executionThread;
 	private boolean threadPause;
 
 	@FXML
-	private Pane graphspace, edgespace, matrixcontainer;
+	private Pane graphspace, edgespace, matrixcontainer; //perche c'e' bisogno di edgespace avendo graphspace
 	@FXML
 	private Button randomize, reset, start, back, draw, next;
 	@FXML
 	private Label nodelabel;
 	@FXML
-	private GridPane nodegrid;
+	private GridPane nodegrid; 
 	@FXML
 	private Slider nodesnumber, animationspeed;
 	@FXML
@@ -110,7 +109,7 @@ public class KruskalController {
 
 	}
 	
-	public void initialize() { //usato solo per pausare/riprendere l'esecuzione del thread
+	public void initialize() { //usato solo per pausare/riprendere l'esecuzione del thread, called from fxml
 
         animationspeed.valueProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -128,7 +127,7 @@ public class KruskalController {
         });
 
     }
-
+	
 	private void newRandomGrid() {
 		randomGrid.clear();
 		for (int i = 0; i < GRID_COLUMNS; i++) {
@@ -151,10 +150,11 @@ public class KruskalController {
 			draw();
 
 		} else if (event.getSource() == start) {
-			if ((nodes.size() == 0) || (nodes.size() != (int) nodesnumber.getValue())) {
+			if ((nodes.size() == 0) || (nodes.size() != (int) nodesnumber.getValue())) {//if is the first start event or if the user changed the n of nodes since last time
 				manageStart((int) nodesnumber.getValue());
 				draw();
 			}
+			testo.setText("");
 			playpause.setImage(play);
 			doKruskal();
 		} else if (event.getSource() == reset) {
@@ -190,15 +190,12 @@ public class KruskalController {
 				application.Algorithms.kruskal((ArrayList<Edge>) edges, nodes.size(), edges.size(), set);
 				List<Edge> sorted = new ArrayList<Edge>(set);
 				Collections.sort(sorted);
-				System.out.println("sorted : " + sorted);
-				String s = sorted.toString();
-				highlight(sorted);
-				testo.setText(s);
 				testo.setFont(new Font(30));
+				highlight(sorted);
 				graphspace.getChildren().add(testo);
 				testo.toFront();
 
-				drawMatrix(); // eseguita solo quando il thread ha finito
+				drawMatrix();
 				return null;
 			}
 
@@ -212,6 +209,7 @@ public class KruskalController {
 					((Circle) getNodebyID(vID).getNode().getChildren().get(0)).setStroke(Color.RED);
 					el.select();
 					fragmentMatrix(uID, vID);
+					testo.appendText(el.toString());
 					Thread.sleep((long) animationspeed.getValue());
 					while(threadPause) {
 						executionThread.sleep(1000);
@@ -219,59 +217,49 @@ public class KruskalController {
 				}
 			}
 
-//			private void highlightFragment(int i) {
-//				edges.get(i).getEdge().setStroke(Color.RED);
-//				edges.get(i).getEdge().setStrokeWidth(2);
-//				int uID = edges.get(i).getuID();
-//				int vID = edges.get(i).getvID();
-//
-//				((Circle) getNodebyID(uID).getNode().getChildren().get(0)).setStroke(Color.RED);
-//				((Circle) getNodebyID(vID).getNode().getChildren().get(0)).setStroke(Color.RED);
-//
-//				edges.get(i).select();
-//
-//				fragmentMatrix(uID, vID);
-//			}
-
 		};
 
-		if (executionThread != null) {
-			redraw();
-			drawMatrix();
+		if (executionThread != null) {//if the thread is already running
 			executionThread.stop();
+			draw();
 		}
+		
 		executionThread = new Thread(task);
 		executionThread.start();
 	}
 
-	private void manageStart(int d) {
-		reset();
+	private void manageStart(int nodesNumber) {//adds nodes and edges
+		reset();//elimina il grafo disegnato e blocca il thread
 		int row;
 		int col;
-		for (int i = 0; i < d; i++) {
+		for (int i = 0; i < nodesNumber; i++) {
 
 			col = randomGrid.get(0).x;
 			row = randomGrid.get(0).y;
 			randomGrid.remove(0);
-
 			GraphNode newNode = new GraphNode(i, row, col);
-			if (nodes.size() > 0) {
-				GraphNode select = nodes.get((new Random()).nextInt(nodes.size()));
-				Edge tmp = new Edge(newNode.getID(), select.getID(), (new Random()).nextInt(MAX_WEIGHT));
-				newNode.addEdge(tmp);
-				select.addEdge(tmp);
+			
+			if (nodes.size() > 0) { //se un nodo e' stato aggiunto
+				GraphNode adjacent = nodes.get((new Random()).nextInt(nodes.size()));
+				Edge tmp = new Edge(newNode.getID(), adjacent.getID(), (new Random()).nextInt(MAX_WEIGHT));
+				newNode.addEdge(adjacent);
+				adjacent.addEdge(newNode);
 				edges.add(tmp);
 			}
 
 			nodes.add(newNode);
 		}
 		addEdges();
+		
 	}
 
 	private void addEdges() {	//adds more edges to the connected graph
 
-		int edgesQty = (new Random()).nextInt(nodes.size());
-
+		int edgesQty = new Random().nextInt(nodes.size());
+		// con int edgesQty = new Random().nextInt(nodes.size()) + 1 bisogna controllare che edgesQty!=nodes.size()!=4, perche sarebbe impossibile aggiungere il 7th arco
+		if(edgesQty == 0)
+			edgesQty = 1;
+			
 		int uID;
 		int vID;
 		GraphNode nodeU;
@@ -282,69 +270,70 @@ public class KruskalController {
 				nodeV = nodes.get((new Random()).nextInt(nodes.size()));
 				uID = nodeU.getID();
 				vID = nodeV.getID();
-			} while ((vID == uID) || (edgeExist(uID, vID)));
-
+				
+			} while ( (vID == uID) || (nodeU.exists(nodeV)) );
+			
 			edges.add(new Edge(uID, vID, (new Random()).nextInt(MAX_WEIGHT)));
+			nodeU.addEdge(nodeV);
+			nodeV.addEdge(nodeU);
 
 		}
 	}
-
-	private boolean edgeExist(int uID, int vID) {
-		for (Edge e : edges) {
-			if ((e.getuID() == uID) || (e.getvID() == uID)) {
-				if ((e.getuID() == vID) || (e.getvID() == vID)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
+	
 
 	@SuppressWarnings("static-access")
 	private void drawMatrix() {
-
 		matrixcontainer.getChildren().clear();
 		GridPane adjMatrix = new GridPane();
 
-		int rows = SPACE_HEIGHT / nodes.size();
-		int cols = SPACE_WIDTH / nodes.size();
-		for (int i = 0; i < nodes.size(); i++) {
+		int rows = SPACE_HEIGHT / (nodes.size() + 1);
+		int cols = SPACE_WIDTH / (nodes.size() + 1);
+		for (int i = 0; i <= nodes.size(); i++) {
 			RowConstraints row = new RowConstraints(rows);
 			ColumnConstraints col = new ColumnConstraints(cols);
 			adjMatrix.getRowConstraints().add(row);
 			adjMatrix.getColumnConstraints().add(col);
 		}
-
+		setMatrix(adjMatrix);
 		edges.forEach((e) -> {
 			Label text0 = new Label();
 			Label text1 = new Label();
 			text0.setText(String.valueOf(e.getWeight()));
 			text1.setText(String.valueOf(e.getWeight()));
 
-//			if(e.isSelected()) {
-//				text0.setStyle("-fx-background-color: yellow");
-//				text1.setStyle("-fx-background-color: yellow");
-//			}
 
 			text0.setFont(new Font("Arial", 20));
 			text1.setFont(new Font("Arial", 20));
 
-			adjMatrix.add(text0, e.getuID(), e.getvID()); // node, uID = col, vID = row
+			adjMatrix.add(text0, e.getuID() + 1, e.getvID() + 1); // node, uID = col, vID = row
 			adjMatrix.setHalignment(text0, HPos.CENTER);
-			adjMatrix.add(text1, e.getvID(), e.getuID());
+			adjMatrix.add(text1, e.getvID() + 1, e.getuID() + 1);//inverso di text0
 			adjMatrix.setHalignment(text1, HPos.CENTER);
 		});
 
 		adjMatrix.setGridLinesVisible(true);
 		matrixcontainer.getChildren().add(adjMatrix);
 	}
+	
+	@SuppressWarnings("static-access")
+	private void setMatrix(GridPane matrix) {
+		for (int i = 0; i < nodes.size(); i++) {
+			Label node = new Label(new String(String.valueOf(nodes.get(i).getID())));
+			node.setFont(new Font("Arial", 20));
+			Label node2 = new Label(new String(String.valueOf(nodes.get(i).getID())));
+			node2.setFont(new Font("Arial", 20));
+			matrix.add(node, i+1, 0);
+			matrix.add(node2, 0, i+1);
+			matrix.setHalignment(node, HPos.CENTER);
+			matrix.setHalignment(node2, HPos.CENTER);
+		}
+	}
 
-	private void fragmentMatrix(int uID, int vID) {
+	private void fragmentMatrix(int uID, int vID) {//color the half the matrix. gridPane class doesn't let you access a specific cell using row, column index
 		GridPane adjMatrix = (GridPane) matrixcontainer.getChildren().get(0);
 		for (Node node : adjMatrix.getChildren()) {
-			boolean found = ((adjMatrix.getRowIndex(node) == vID) && (adjMatrix.getColumnIndex(node) == uID))
-					|| ((adjMatrix.getRowIndex(node) == uID) && (adjMatrix.getColumnIndex(node) == vID));
+			boolean found = ((adjMatrix.getRowIndex(node) == vID + 1) && (adjMatrix.getColumnIndex(node) == uID + 1))
+					|| ((adjMatrix.getRowIndex(node) == uID + 1) && (adjMatrix.getColumnIndex(node) == vID + 1));
 			if (found) {
 				node.setStyle("-fx-background-color: red");
 				break;
@@ -353,24 +342,6 @@ public class KruskalController {
 	}
 
 	private void draw() {
-		graphspace.getChildren().clear();
-		nodegrid.getChildren().clear();
-		edgespace.getChildren().clear();
-		graphspace.getChildren().add(nodegrid);
-		graphspace.getChildren().add(edgespace);
-		graphspace.getChildren().add(testo);
-		nodegrid.toFront();
-		nodes.forEach((n) -> {
-			nodegrid.add(n.getNode(), n.getCol(), n.getRow());
-		});
-		edges.forEach((e) -> {
-			connect(e);
-			addWeight(e);
-		});
-		drawMatrix();
-	}
-
-	private void redraw() {
 		graphspace.getChildren().clear();
 		nodegrid.getChildren().clear();
 		edgespace.getChildren().clear();
@@ -429,13 +400,18 @@ public class KruskalController {
 		try {
 			if (executionThread != null)
 				executionThread.stop();
+			
 			graphspace.getChildren().clear();
 			nodegrid.getChildren().clear();
 			edgespace.getChildren().clear();
-			graphspace.getChildren().add(nodegrid);
-			graphspace.getChildren().add(edgespace);
+			
+			
+		    graphspace.getChildren().add(nodegrid);
+		    graphspace.getChildren().add(edgespace);
+			 
+			 
 			testo.setText("");
-			graphspace.getChildren().add(testo);
+			graphspace.getChildren().add(testo); 
 			nodegrid.toFront();
 			newRandomGrid();
 			nodes.clear();
