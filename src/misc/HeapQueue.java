@@ -2,25 +2,6 @@ package misc;
 import java.util.ArrayList;
 
 
-class HeapItem<T extends Comparable<? super T>> {
-    public T value;
-    public int priority;
-    public int pos;
-
-    public HeapItem(T value, int priority, int pos) {
-        this.value = value;
-        this.priority = priority;
-        this.pos = pos;
-    }
-
-	@Override
-	public String toString() {
-		return "HeapItem [value=" + value + ", priority=" + priority + ", pos=" + pos + "]";
-	}
-    
-}
-
-
 public class HeapQueue<T extends Comparable<? super T>> {
     private int used_slots;
     private int total;
@@ -30,6 +11,11 @@ public class HeapQueue<T extends Comparable<? super T>> {
         total = n;
         used_slots = 0;
         array = new ArrayList<HeapItem<T>>();
+    }
+    
+    
+    public ArrayList<HeapItem<T>> getQueue() {
+    	return array;
     }
 
     public int size() { return used_slots; };

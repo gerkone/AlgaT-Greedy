@@ -10,7 +10,7 @@
    <children>
       <VBox prefHeight="400.0" prefWidth="600.0">
          <children>
-            <TextArea fx:id="questionArea" editable="false" prefHeight="233.0" prefWidth="600.0" />
+            <TextArea fx:id="questionArea" editable="false" prefHeight="233.0" prefWidth="600.0" wrapText="true" />
             <Button fx:id="answer1" disable="true" mnemonicParsing="false" onAction="#handleAnswer" text="Button">
                <VBox.margin>
                   <Insets bottom="5.0" top="20.0" />
