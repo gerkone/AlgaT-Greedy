@@ -77,7 +77,7 @@ public class KruskalController {
 	private boolean threadPause;
 
 	@FXML
-	private Pane graphspace, edgespace, matrixcontainer; //perche c'e' bisogno di edgespace avendo graphspace
+	private Pane graphspace, edgespace, matrixcontainer;
 	@FXML
 	private Button randomize, reset, start, back, draw, next;
 	@FXML
@@ -155,7 +155,7 @@ public class KruskalController {
 				draw();
 			}
 			testo.setText("");
-			playpause.setImage(play);
+//			playpause.setImage(play);
 			doKruskal();
 		} else if (event.getSource() == reset) {
 			reset();
@@ -419,7 +419,7 @@ public class KruskalController {
 
 			matrixcontainer.getChildren().clear();
 		} catch (Exception e) {
-			System.out.print("qualcosa e' andato storto");
+			e.printStackTrace();
 		}
 	}
 

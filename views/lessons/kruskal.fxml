@@ -120,7 +120,7 @@
                   </Tab>
                   <Tab closable="false" text="Questions">
                       		<content>
-                      			<!--<fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/>-->
+                      			<fx:include fx:id="questionDialogue" source="/questionnaire.fxml"/>
                       		</content>
                   </Tab>
                </tabs>

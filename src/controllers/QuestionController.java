@@ -116,7 +116,7 @@ public class QuestionController {
 			return false;
 			
 		} else {
-			answer1.setDisable(true);
+//			answer1.setDisable(true);
 			return true;
 		}
 	}
