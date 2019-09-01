@@ -409,7 +409,6 @@ public class KruskalController {
 		    graphspace.getChildren().add(nodegrid);
 		    graphspace.getChildren().add(edgespace);
 			 
-			 
 			testo.setText("");
 			graphspace.getChildren().add(testo); 
 			nodegrid.toFront();
