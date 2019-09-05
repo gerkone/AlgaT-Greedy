@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 
 import application.Algorithms;
@@ -434,7 +436,7 @@ public class MooreController {
 	
 	private int getLastID() {
 		if(segments.size() > 0) {
-			return segments.get(segments.size()-1).getID();
+			return (segments.stream().max(Comparator.comparingInt(Segment::getID)).get()).getID();
 		} else {
 			return -1;
 		}

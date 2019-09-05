@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.Oggetto;
+import models.Segment;
 
 public class ZainoController {
 	private static final int MAX_OGGETTI = 37; // objectare.width/oggetto.width (740/20)
@@ -241,17 +242,9 @@ public class ZainoController {
 			} else {
 				gain = (new Random()).nextInt(models.Oggetto.MAX_GAIN) + 1;
 			}
-			
-			if (stuff.size() > 0) {
-				stuff.add(new Oggetto(gain, weight, stuff.get(stuff.size() - 1).getID() + 1, false)); // assegna id in base ai precedenti
-				goodstuff.add(new Oggetto(gain, weight, stuff.get(stuff.size() - 1).getID() + 1, true));
-			} else {
-				stuff.add(new Oggetto(gain, weight, 0, false));
-				goodstuff.add(new Oggetto(gain, weight, 0, true));
-			}
-			
+			stuff.add(new Oggetto(gain, weight, getLastID() + 1, false)); // assegna id in base ai precedenti
+			goodstuff.add(new Oggetto(gain, weight, getLastID() + 1, true));
 			objectpoolsize.setValue(objectpoolsize.getValue() + 1);
-
 			gainadd.clear();
 			weightadd.clear();
 
@@ -324,6 +317,14 @@ public class ZainoController {
 			}
 		}
 		return null;
+	}
+	
+	private int getLastID() {
+		if(stuff.size() > 0) {
+			return (stuff.stream().max(Comparator.comparingInt(Oggetto::getID)).get()).getID();
+		} else {
+			return -1;
+		}
 	}
 	
 	private void softReset() {
