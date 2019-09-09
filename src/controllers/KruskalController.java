@@ -405,7 +405,6 @@ public class KruskalController {
 			nodegrid.getChildren().clear();
 			edgespace.getChildren().clear();
 			
-			
 		    graphspace.getChildren().add(nodegrid);
 		    graphspace.getChildren().add(edgespace);
 			 

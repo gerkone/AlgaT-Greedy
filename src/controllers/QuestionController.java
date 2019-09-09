@@ -114,9 +114,7 @@ public class QuestionController {
 	private boolean checkAnswer(int a) {
 		if((right == -1) || (right != a)) {
 			return false;
-			
 		} else {
-//			answer1.setDisable(true);
 			return true;
 		}
 	}

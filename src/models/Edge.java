@@ -63,7 +63,6 @@ public class Edge  implements Comparable<Edge>{
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		String s = new String();
 		s += "first node : " + this.vID + ", second node : " + this.uID + ", weight :" + this.weight + "\n";
 		return s;

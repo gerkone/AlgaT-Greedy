@@ -185,16 +185,11 @@ public class MooreController {
 		Task<Void> task = new Task<Void>() {
 			
 		    @Override public Void call() throws InterruptedException, IOException {
-//		    	HashMap<Integer, Integer> queue = new HashMap<Integer, Integer>();
 		    	HeapQueue<Integer> queue = new HeapQueue<Integer>(segments.size());
 		    	
 		    	code.get(0).setStyle("-fx-background-color: yellow;");
 		    	
 		    	Thread.sleep((int) animationspeed.getValue());
-				/*
-				 * for(int k = 0; k < segments.size(); k++) { queue.insert(0,
-				 * segments.get(k).getDt()); } System.out.println(queue);
-				 */
 		    	
 				step(0,1);
 				
@@ -205,7 +200,6 @@ public class MooreController {
 					step(1,2);
 					
 					queue.insert(segments.get(i).getID(), segments.get(i).getDt());
-		    		System.out.println("heap :" + queue);
 					
 					step(2,3);
 					
@@ -218,7 +212,6 @@ public class MooreController {
 						step(4,5);
 						
 						int mID = queue.deleteMax();
-						System.out.println("deleted : "+ mID);
 						
 						step(5,6);
 						
@@ -287,7 +280,6 @@ public class MooreController {
 						executionThread.sleep(1000);
 					}
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -382,7 +374,6 @@ public class MooreController {
 		valuesbox.getChildren().clear();
 		
 		time = 0;
-		//questionDialogueController.clear();
 	}
 	
 	

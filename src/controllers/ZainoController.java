@@ -108,8 +108,6 @@ public class ZainoController {
 			}
 			manageSort();
 			softReset();
-//			totalgain.textProperty().bind(new SimpleIntegerProperty(totgain).asString());
-//			remainingcapacity.textProperty().bind(new SimpleDoubleProperty(capleft).asString());
 			doRealBag();
 			
 		} else if (event.getSource() == reset) {
@@ -179,8 +177,6 @@ public class ZainoController {
 						tmp.setSelected(true);
 						tmp.updateText();
 						totgain+=partialGain;
-//						stuff.get(i).setWeight(stuff.get(i).getWeight() - capleft);		evitare altrimenti si modifica lista di oggetti
-//						stuff.get(i).setGain(stuff.get(i).getGain() - partialGain);
 						stuff.get(i).getObjectSprite().setStyle("-fx-background-color: red");
 						tmp.getObjectSprite().setStyle("-fx-background-color: red");
 						capleft = 0.0;

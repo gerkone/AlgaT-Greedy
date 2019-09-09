@@ -26,20 +26,7 @@ public class MenuController {
     @FXML
     Accordion lessonmenu;
 	
-    public void initialize() {
-//    	stage = (Stage) lessonmenu.getScene().getWindow();	//metodo pigro di ottenere la finestra da uno degli elementi
-//		if(event.getSource() == toMoore) {
-//			root = FXMLLoader.load(getClass().getResource("/tutorial/moore.fxml"));
-//			scene = new Scene(root, MOORE_WIDTH_t, MOORE_HEIGHT_t);
-//		} else if (event.getSource() == toPrim) {
-//			root = FXMLLoader.load(getClass().getResource("/tutorial/kruskal.fxml"));
-//			scene = new Scene(root, KRUSKAL_WIDTH_t, KRUSKAL_HEIGHT_t);
-//		} else if(event.getSource() == toZaino) {
-//			root = FXMLLoader.load(getClass().getResource("/tutorial/zaino.fxml"));
-//			scene = new Scene(root, ZAINO_WIDTH_t, ZAINO_HEIGHT_t);
-//		}
-		
-		
+    public void initialize() {	
 		misc.LessonManager.lessons.forEach((l) -> {
 			Button b = new Button();
 			b.setText("Enter");
