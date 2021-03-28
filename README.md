@@ -13,8 +13,3 @@ Ognuna di queste lezioni si divide in due parti: una dimostrativa dell'esecuzion
 ### Dipendenze
 Il progetto è realizzato in Java, con il supporto di JavaFX e il linguaggio markup fxml per il reparto grafico. 
 Sarà quindi necessario avere una versione del JDK con JavaFX inclusa (< JDK9), o installare OpenJFX standalone.
-
-### Contributors
-Gruppo: I Rockefeller:
-- Gianluca Galletti ([@gerkone](https://github.com/gerkone))
-- Lorenzo Liso ([@notchla](https://github.com/notchla))
